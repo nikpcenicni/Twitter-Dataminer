@@ -46,8 +46,15 @@ def get_replies(tweet_id, name):
 def get_mentions(name):
     mentions = []
     for mention in api.search_tweets(q='@'+name, count=NUM_TWEETS):
-        mentions.append(mention)
+        if "RT @" not in mention.text:
+            mentions.append(mention)
     return mentions
 
-# mentions = get_mentions(name)
-# print(mentions)
+def tweet_processing(tweets):
+    tweet_list = open("tweet_list.txt", "a")
+    for tweet in tweets:
+        tweet_list.write(tweet.text)
+        tweet_list.write("\n")
+    tweet_list.close()
+    
+tweet_processing(get_mentions(name))
