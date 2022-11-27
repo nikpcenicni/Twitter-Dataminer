@@ -42,7 +42,7 @@ def operations(screen_name):
     else:
         return None
 
-def user_input():
+def user_information():
     screen_name = input("Enter a Twitter handle: ")
     # if screen_name[0] == '@':
     #     screen_name = screen_name[1:]
@@ -56,9 +56,12 @@ def user_input():
     print("Number of Likes: " + str(user.favourites_count))
     return screen_name
 
+def show_graphs(emotions):
+    graph_emotions(emotions)
+
 def main():
     
-    screen_name = user_input()
+    screen_name = user_information()
     
     tweets = operations(screen_name)
     if tweets != None:
@@ -68,18 +71,10 @@ def main():
         emotions = preprocess_text()
         print(f"Emotional associations: {emotions}")
         print(sentiment_analysis(clean_tweets()))
-
-    # tweet_processing(tweets)
-
-    # # select the tweet you want to analyze
+        option = input("Enter 1 to show graphs, or any other value to quit: ")
+        if option == '1':
+            show_graphs(emotions)
     
-    # # Get the sentiment of the tweets
-    
-    # cleaned_tweets = clean_tweets()
-    # sentiment = sentiment_analysis(cleaned_tweets)
-
-    # # Print the sentiment
-    # print(sentiment)
     reset()
     
 main()
