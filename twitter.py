@@ -6,20 +6,20 @@ from dotenv import load_dotenv
 # imports values from .env file
 load_dotenv()
 
-NUM_TWEETS = 100
+NUM_TWEETS = 1000
 
 auth = tweepy.OAuthHandler(os.getenv("CONSUMER_KEY"), os.getenv("CONSUMER_SECRET"))
 
 api = tweepy.API(auth)
 
 # Get the User object for twitter...
-user = api.get_user(screen_name='ElonMusk')
+user = api.get_user(screen_name='JustinTrudeau')
 print(user.screen_name)
 print(user.followers_count)
 print(user.id)
 
 # Gets tweets from user
-tweets = api.user_timeline(screen_name='ElonMusk', count=NUM_TWEETS, exclude_replies=True, include_rts=False)
+tweets = api.user_timeline(screen_name='JustinTrudeau', count=NUM_TWEETS, exclude_replies=True, include_rts=False)
 for tweet in tweets:
     print(tweet.text)
     
