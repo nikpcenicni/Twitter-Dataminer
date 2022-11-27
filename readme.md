@@ -43,3 +43,41 @@ conda create --name <env> --file conda-requirements.txt
 You can replace ```<env>``` with a name of your choosing.
 
 
+## Running
+
+To run the project you must first activate the virtual environment.
+
+### PIP
+```
+source env/bin/activate
+```
+
+### Conda
+```
+conda activate <env>
+```
+where ```<env>``` is the name of the environment you created.
+
+Once the environment is activated you can run the project by running the following command.
+```
+python main.py
+```
+
+## Features
+
+### Tweet Miner
+The tweet miner is a tool that allows users to mine tweets from a given user. The user can select to mine tweets from the user's mentions or replies. The user can also select the number of tweets to mine.
+
+### Sentiment Analyzer
+The sentiment analyzer is a tool that allows users to analyze the sentiment of a given tweet. The user can select to analyze the sentiment of a tweet by entering the tweet id or by entering the tweet text. The user can also select the number of tweets to analyze.
+
+## Built With
+This project was built using the following technologies.
+
+[Python](https://www.python.org/) - The programming language used
+[Tweepy](https://www.tweepy.org/) - The python library used to interact with the Twitter API
+[NLTK](https://www.nltk.org/) - The python library used to analyze the sentiment of the tweets
+
+## Authors
+Nikholas Pcenicni - Initial work - [nikpcenicni](https://pcenicni.dev)
+Arshjit Pelia - Initial work - [Arxh-23](https://github.com/Arxh-23)
