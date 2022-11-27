@@ -1,5 +1,4 @@
 import os
-import time
 import tweepy
 from dotenv import load_dotenv
 
