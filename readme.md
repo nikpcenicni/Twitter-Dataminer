@@ -75,7 +75,9 @@ The sentiment analyzer is a tool that allows users to analyze the sentiment of a
 This project was built using the following technologies.
 
 [Python](https://www.python.org/) - The programming language used
+
 [Tweepy](https://www.tweepy.org/) - The python library used to interact with the Twitter API
+
 [NLTK](https://www.nltk.org/) - The python library used to analyze the sentiment of the tweets
 
 ## Authors
