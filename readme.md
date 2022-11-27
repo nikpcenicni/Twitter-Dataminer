@@ -82,4 +82,5 @@ This project was built using the following technologies.
 
 ## Authors
 Nikholas Pcenicni - Initial work - [nikpcenicni](https://pcenicni.dev)
+
 Arshjit Pelia - Initial work - [Arxh-23](https://github.com/Arxh-23)
