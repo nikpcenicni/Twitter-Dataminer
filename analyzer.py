@@ -76,7 +76,9 @@ def graph_emotions(w):
     
 def analyse_tweets():
     cleaned_text = clean_tweets()
-    return sentiment_analysis(cleaned_text)
+    lemmatized_words = lemmatize_words(cleaned_text)
+    
+    return sentiment_analysis(lemmatized_words)
     # emotion_list = preprocess_text()
     # graph_emotions(emotion_list)
     # return

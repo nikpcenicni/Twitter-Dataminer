@@ -57,7 +57,9 @@ def user_information():
     return screen_name
 
 def show_graphs(emotions):
-    graph_emotions(emotions)
+    option = input("Enter 1 to show graphs, or any other value to quit: ")
+    if option == '1':
+        graph_emotions(emotions)
 
 def main():
     
@@ -71,9 +73,7 @@ def main():
         emotions = preprocess_text()
         print(f"Emotional associations: {emotions}")
         print(sentiment_analysis(clean_tweets()))
-        option = input("Enter 1 to show graphs, or any other value to quit: ")
-        if option == '1':
-            show_graphs(emotions)
+        show_graphs(emotions)
     
     reset()
     
