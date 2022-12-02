@@ -28,8 +28,9 @@ from sklearn.svm import LinearSVC #SVM
 from sklearn.naive_bayes import BernoulliNB #Naive Bayes
 from sklearn.linear_model import LogisticRegression #Logistic Regression
 from sklearn.model_selection import train_test_split #splitting data
-from sklearn.feature_extraction.text import TfidfVectorizer #TFIDF vectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer#TFIDF vectorizer
 from sklearn.feature_extraction.text import CountVectorizer #Count vectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.metrics import confusion_matrix, classification_report #confusion matrix
 
 #XGBoost
@@ -117,18 +118,74 @@ def clean_data():
     #perform sentiment analysis on tweets
     df['Sentiment'] = df['tweet_OG'].apply(get_sentiment)
 
+    #shuffle dataset and reset index
+    df['Sentiment'] = df['Sentiment'].map({'Extremely Negative':0,'Negative':0,'Neutral':1,'Positive':2,'Extremely Positive':2})
+    df = df.sample(frac=1).reset_index(drop=True)
+    df_test = df.copy()
+
+    #crossbalancing dataset using RandomOverSampler to create training x and y
+    ros = RandomOverSampler(random_state=0)
+    train_x, train_y = ros.fit_resample(np.array(df['tweet_OG']).reshape(-1, 1), np.array(df['Sentiment']).reshape(-1, 1))
+    train_os = pd.DataFrame(list(zip([x[0] for x in train_x], train_y)), columns = ['tweet_OG', 'Sentiment']);
+
+    #split dataset into train, test and validation sets
+    X = train_os['tweet_OG']
+    y = train_os['Sentiment']
+
+    X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.1, stratify=y, random_state=42)
+    X_test = df_test['tweet_OG'].values
+    y_test = df_test['Sentiment'].values
+
+    
+    #create copies of train, test and validation sets
+    y_train_le = X_train.copy()
+    y_test_le = X_test.copy()
+    y_valid_le = X_valid.copy()
+
+    #encode with one hot encoding
+    ohe = preprocessing.OneHotEncoder()
+    y_train = ohe.fit_transform(np.array(y_train).reshape(-1, 1)).toarray()
+    y_valid = ohe.fit_transform(np.array(y_valid).reshape(-1, 1)).toarray()
+    y_test = ohe.fit_transform(np.array(y_test).reshape(-1, 1)).toarray()
+
+    print(f"TRAINING DATA: {X_train.shape[0]}\nVALIDATION DATA: {X_valid.shape[0]}\nTESTING DATA: {X_test.shape[0]}" )
+    print()
+
+    #call naive_bayes function
+    naive_bayes(X_train, X_test, y_train_le, y_test_le)
     return df
+
+def naive_bayes(X_train, X_test, y_train_le, y_test_le):
+    clf = CountVectorizer()
+    X_train_cv = clf.fit_transform(X_train)
+    X_test_cv = clf.transform(X_test)
+
+    tf_transformer = TfidfTransformer(use_idf=True).fit(X_train_cv)
+    X_train_tf = tf_transformer.transform(X_train_cv)
+    X_test_tf = tf_transformer.transform(X_test_cv)
+
+    nb_classifier = BernoulliNB()
+    nb_classifier.fit(X_train_tf, y_train_le)
+
+    nb_predictions = nb_classifier.predict(X_test_tf)
+
+    print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions))
+    print()
+    #classification report
+    print(classification_report(y_test_le, nb_predictions, target_names=['Negative', 'Neutral', 'Positive']))
+    print()
+
 
 def get_sentiment(tweet):
     #get sentiment using vaderSentiment and classify tweets as extreme positive, positive, neutral, negative, extreme negative
     sid = SentimentIntensityAnalyzer()
     ss = sid.polarity_scores(tweet)
     if ss['compound'] >= 0.05:
-        return 'Extreme Positive'
+        return 'Extremely Positive'
     elif ss['compound'] > -0.05 and ss['compound'] < 0.05:
         return 'Neutral'
     else:
-        return 'Extreme Negative'
+        return 'Extremely Negative'
     
 
 def lemmatize(text):
@@ -167,8 +224,8 @@ def clean_tweet(tweet):
 def main():
     # create_CSV()
     df = clean_data()
-    df.info()
-    print(df.head())
+    # df.info()
+    # print(df.head())
 
 if __name__ == "__main__":
     main()
