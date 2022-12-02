@@ -18,6 +18,10 @@ def clean_tweets():
     text = text.replace('\r', '').replace('\n', ' ').replace('\n', ' ').lower() #remove \n and \r and lowercase
     text = re.sub(r"(?:\@|https?\://)\S+", "", text) #remove links and mentions
     text = re.sub(r'[^\x00-\x7f]',r'', text) #remove non utf8/ascii characters such as '\x9a\x91\x97\x9a\x97'
+    text = re.sub(r"https\S+|www\S+http\S+", '', text, flags = re.MULTILINE)
+    text = re.sub(r'\@w+|\#','', text)
+    text = re.sub(r'[^\w\s]','',text)
+    text = re.sub(r'ð','',text)
     banned_list= string.punctuation + 'Ã'+'±'+'ã'+'¼'+'â'+'»'+'§'
     table = str.maketrans('', '', banned_list)
     text = text.translate(table)
@@ -32,7 +36,6 @@ def preprocess_text():
     cleaned_text = clean_tweets()
     # Using word_tokenize because it's faster than split()
     tokenized_words = word_tokenize(cleaned_text, "english")
-    
     final_words = stop_words(tokenized_words)
     lemma_words = lemmatize_words(final_words)
     emotion_words = emotion_analysis(lemma_words)

@@ -28,6 +28,18 @@ def get_user_tweets(screen_name):
     tweets = api.user_timeline(screen_name=screen_name, count=NUM_TWEETS, exclude_replies=True, include_rts=False)
     return tweets
 
+def get_likes_User(screen_name):
+    likes = []
+    for like in api.favorites(screen_name=screen_name, count=NUM_TWEETS):
+        likes.append(like)
+    return likes
+
+def get_likes_Tweet(tweet_id):
+    likes = []
+    for like in api.favorites(id=tweet_id, count=NUM_TWEETS):
+        likes.append(like)
+    return likes
+
 def get_replies(tweet_id, screen_name):
     replies = []
 

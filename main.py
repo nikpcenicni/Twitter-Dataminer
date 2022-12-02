@@ -75,7 +75,6 @@ def show_graphs(emotions):
 
 def main():
 
-    
     action = input("Enter 1 to analyze a user, or 2 to search by keyword: ")
     if action == '1':
         screen_name = user_information()    
