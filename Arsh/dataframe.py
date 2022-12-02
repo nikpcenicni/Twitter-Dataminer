@@ -7,25 +7,25 @@
 #general purpose packages
 import numpy as np
 import pandas as pd
-import tensorflow as tf
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-import os, re, string, io
-import json
-import csv
-import tweepy
 
 #data processing
-import emoji
+import os, re, string, io, emoji, tweepy, csv, sys
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer, PorterStemmer
 # from nltk.tokenize import sent_tokenize, word_tokenize
 
-from sklearn import preprocessing
+from sklearn import preprocessing, metrics
 from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split
+
+#Naive Bayes
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.naive_bayes import MultinomialNB
 
 #sentiment analysis
 from textblob import TextBlob
@@ -35,6 +35,8 @@ from textblob.sentiments import NaiveBayesAnalyzer
 #keras
 import tensorflow as tf
 from tensorflow import keras
+
+
 
 # import vaderSentiment as vader
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
@@ -67,7 +69,7 @@ def create_CSV(hashtag_phrase):
                     'followers_count', 'retweet_count', 'favorite_count', 'Sentiment'])
        
         # For each tweet matching hashtag and write relevant info to the spreadsheet
-        for tweet in tweepy.Cursor(api.search_tweets, q=hashtag_phrase+' -filter:retweets', lang="en", tweet_mode='extended').items(10):
+        for tweet in tweepy.Cursor(api.search_tweets, q=hashtag_phrase+' -filter:retweets', lang="en", tweet_mode='extended').items(50):
             #perform sentiment analysis with vadarsentiment
             sentiment = SentimentIntensityAnalyzer().polarity_scores(tweet.full_text).get('compound')
             #get value of sentiment
@@ -110,31 +112,77 @@ def create_dataframe(fname):
     stemmer = PorterStemmer()
     df['tweet_text'] = df['tweet_text'].apply(lambda x: ' '.join([stemmer.stem(word) for word in x.split()]))
 
+    #drop tweets with with less than 3 words
+    df = df[df['tweet_text'].str.split().str.len() > 3]
+
+    #remove tweets with less than 3 characters
+    df = df[df['tweet_text'].str.len() > 3]
+
+    #shuffle dataframe and reset index
+    df = df.sample(frac=1).reset_index(drop=True)
+
     #tokenize with BertTokenizerFast
     tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
     df['tweet_text'] = df['tweet_text'].apply(lambda x: tokenizer.encode(x, add_special_tokens=True))
 
+    #create test set
+    df_test = df.sample(frac=0.2, random_state=0)
+    df_test = df_test.reset_index(drop=True)
+
     #balance classes in dataset with RandomOverSampler
     #oversample the train test to remove bias towards the majority classes.
     ros = RandomOverSampler(random_state=0)
-    X_resampled, y_resampled = ros.fit_resample(df['tweet_text'].values.reshape(-1,1), df['Sentiment'].values.reshape(-1,1))
-    df = pd.DataFrame(X_resampled, columns=['tweet_text'])
-    df['Sentiment'] = y_resampled
+    x_train, y_train = ros.fit_resample(df['tweet_text'].values.reshape(-1,1), df['Sentiment'].values.reshape(-1,1))
+    train_os = pd.DataFrame(list(zip([x[0] for x in x_train], y_train)), columns = ['tweet_text', 'Sentiment']);
+
+    x = train_os['tweet_text'].values
+    y = train_os['Sentiment'].values
 
     #split dataset into train and test
-    X_train, X_test, y_train, y_test = train_test_split(df['tweet_text'], df['Sentiment'], test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(df['tweet_text'], df['Sentiment'], test_size=0.1, random_state=42)
+
+    x_test = df_test['tweet_text'].values
+    y_test = df_test['Sentiment'].values
+
+    #create copies of the test set
+    y_train_le = y_train.copy()
+    y_test_le = y_test.copy()
 
     #Improve accuracy of model by encoding labels with one hot encoding
-    le = preprocessing.LabelEncoder()
-    le.fit(y_train)
-    y_train = le.transform(y_train)
-    y_test = le.transform(y_test)
+    ohe = preprocessing.OneHotEncoder()
+    y_train = ohe.fit_transform(y_train.values.reshape(-1,1)).toarray()
+    y_test = ohe.fit_transform(y_test.reshape(-1,1)).toarray()
 
-    #pad sequences
-    X_train = tf.keras.preprocessing.sequence.pad_sequences(X_train, maxlen=128, padding='post')
-    X_test = tf.keras.preprocessing.sequence.pad_sequences(X_test, maxlen=128, padding='post')
-
+    #call function to perform simple naive bayes classification with baseline accuracy
+    naive_bayes_baseline(X_train, X_test, y_train_le, y_test_le)
     return df
+
+def naive_bayes_baseline(X_train, X_test, y_train, y_test):
+    #token count vectorizer
+    vectorizer = CountVectorizer()
+    X_train_tf = vectorizer.fit_transform(X_train)
+    X_test_tf = vectorizer.transform(X_test)
+
+    #train model
+    clf = MultinomialNB().fit(X_train_tf, y_train)
+
+    #predict
+    predicted = clf.predict(X_test_tf)
+
+    #print accuracy
+    print("Naive Bayes Accuracy: ", accuracy_score(y_test, predicted))
+
+    #print classification report
+    print(classification_report(y_test, predicted))
+
+
+def accuracy_score(y_test, y_pred):
+    return np.sum(y_test == y_pred, axis=0) / y_test.shape[0]
+
+def classification_report(y_test, y_pred):
+    target_names = ['negative', 'neutral', 'positive']
+    return metrics.classification_report(y_test, y_pred, target_names=target_names)
+
 
 # clean the tweets
 def clean_tweet(tweet):
@@ -167,8 +215,9 @@ def clean_tweet(tweet):
 def main():
     #clear csv file
     open('dataset.csv', 'w').close()
-    df = create_dataframe(create_CSV("covid19"))
-    df.info()
+    create_CSV("WorldCup")
+    # df = create_dataframe(create_CSV("covid19"))
+    # df.info()
 
 
 if __name__ == "__main__":

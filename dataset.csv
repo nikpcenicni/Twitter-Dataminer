@@ -1,11 +1,102 @@
-timestamp,tweet_text,username,all_hashtags,location,followers_count,retweet_count,favorite_count,Sentiment
-2022-12-02 02:01:06+00:00,"b'#MakeNoMistake perfectly healthy young people die instantly, #DavidRobinson, #JakeFlint #AaronCarter are the latest casualties of either #COVID19 #vaccine or maybe its the ChemTrails? #MAGA #NIH @WHO @NIH @America'",b'crussellgo59',"['MakeNoMistake', 'DavidRobinson', 'JakeFlint', 'AaronCarter', 'COVID19', 'vaccine', 'MAGA', 'NIH']",,5,0,0,positive
-2022-12-02 02:00:58+00:00,"b'Since the start of the pandemic, 1,106,335 Americans have died from #COVID19 (16.7% of all deaths worldwide). That is about the same as 48,101 Onawa train wrecks which killed 23 people in 1919: https://t.co/JijP8SXiaK'",b'COVID_Scale',['COVID19'],Earth,1370,0,0,negative
-2022-12-02 02:00:38+00:00,"b'@abclive @narendramodi @elonmusk #Covid The PIB did not issue press release today on data of COVID19 Vaccination for 12-14 years\xc2\xa0which was started on 16/03/2022 but MoHFW on its official website informed that total 7,37,96,991 vaccination doses were given as of date to children'",b'abclive',['Covid'],India,958,0,0,neutral
-2022-12-02 02:00:10+00:00,"b'Very interesting.  How The #COVID19 #pandemic pushed preprint-based #journalism into the mainstream, explain @FleerackersA and @LaurenMaggio in @NiemanLab: https://t.co/oR45pDyxel https://t.co/7OFU6v86qV'",b'CaddyMarketing',"['COVID19', 'pandemic', 'journalism']",Los Angeles / Ventura County,4328,0,0,positive
-2022-12-02 02:00:05+00:00,"b'@fordnation How about allowing Medical Officers of Health work as the HPPA intended, and give them back the independent authority to pass section 22 orders without government interference to manage the unprecedented epidemic of #COVID19, #influenza and #RSV . #onpoli #COVID19'",b'ccleighton',"['COVID19', 'influenza', 'RSV', 'onpoli', 'COVID19']",Ontario,6935,0,1,positive
-2022-12-02 02:00:01+00:00,"b'Grandparents, grandkids, &amp; all! Protect yourself and loved ones from #COVID19! Stop by our Auburn Mall vaccine site. Get everyone age 6 months &amp; up vaccinated FREE.   No appointment, insurance, or proof of citizenship needed. For more info, go to: https://t.co/5l97kkHrDH. https://t.co/Lu1cAFi2fh'",b'KCPubHealth',['COVID19'],"Seattle & King County, WA",42619,0,0,positive
-2022-12-02 02:00:00+00:00,"b'Chinese mainland records 4,278 new confirmed #COVID19 cases on Thursday. A total of 30,702 asymptomatic cases were also recorded, data from the National Health Commission showed on Friday. https://t.co/rRZF0Z24y5'",b'CGTNOfficial',['COVID19'],"Beijing, China",13172294,0,0,neutral
-2022-12-02 02:00:00+00:00,"b'Tokyo\xe2\x80\x99s COVID-19 Weekly Update  Infection situation: Orange Status on health care provision system: Orange New positive cases per day: 11,047.3 (as of Nov. 30) Increase rate: 118.1% (as of Nov. 30)  Check here for the latest updates: https://t.co/j7swqL2DHC #COVID #COVID19 https://t.co/nCrCQB8COw'",b'Tokyo_gov',"['COVID', 'COVID19']","Shinjuku-ku, Tokyo",232212,0,1,positive
-2022-12-02 02:00:00+00:00,"b'With the #COVID19 #pandemic accelerating the wide adoption of #Cloud technology in #healthcare, the role  of #DataSecurity and IT operations in #health systems has expanded to such extent that it has initiated overall improvement in #patientexperience. https://t.co/sPVLWOMQym https://t.co/Lown3VwKI0'",b'Medigy1',"['COVID19', 'pandemic', 'Cloud', 'healthcare', 'DataSecurity', 'health', 'patientexperience']",,1113,0,0,positive
-2022-12-02 01:59:47+00:00,b'@FOHMaster @SenseiZuna @yoriber @ChinaKatWrites @NietzscheKant2 @DrSdeG In my neck of the woods unvaccinated are still 3.1 times still more likely to die from COVID-19 (October 2022)(have not verified that your graph is authentic but here is my data with the source) https://t.co/qhJXV8bCcc',b'MysticMama23',[],,64,0,0,negative
+timestamp,tweet_OG,username,all_hashtags,location,followers_count,retweet_count,favorite_count,Sentiment
+
+2022-12-02 20:45:58+00:00,b'#serbiavsswiss #WorldCup  Cards = \xf0\x9f\x92\xb0\xf0\x9f\x92\xb0\xf0\x9f\x92\xb0\xf0\x9f\x92\xb0',b'Gingerbeerking',"['serbiavsswiss', 'WorldCup']",wakefield,995,0,0,neutral
+
+2022-12-02 20:45:56+00:00,b'Mildred #BusinessTravel366 Marta #\xe4\xb8\x96\xe7\x95\x8c\xe6\x9d\xaf Pleasure #WorldCup Kenneth #\xe4\xb8\x96\xe7\x95\x8c\xe6\x9d\xaf\xe4\xb9\xb0\xe7\x90\x83  https://t.co/3a9pkBsVxh',b'Lael25364439',"['BusinessTravel366', '世界杯', 'WorldCup', '世界杯买球']",@Lw0369,3,0,0,positive
+
+2022-12-02 20:45:56+00:00,"b'Brazil has played the lamest set of games all World Cup, bore fest after bore fest #WorldCup'",b'Tahjmahal6',['WorldCup'],,70,0,0,negative
+
+2022-12-02 20:45:54+00:00,b'I have to keep reminding myself that this is Not the Real Brazil \xf0\x9f\x98\x82\xf0\x9f\x98\xb3 #WorldCup #FIFAWorldCup2022 #Neymar_Jr',b'ArchieAbsalom44',"['WorldCup', 'FIFAWorldCup2022', 'Neymar_Jr']",,56,0,0,positive
+
+2022-12-02 20:45:50+00:00,"b""What's with all the tackling going on here? Brazil-Cameroon #WorldCup""",b'PussonaPelona',['WorldCup'],,184,0,0,neutral
+
+2022-12-02 20:45:47+00:00,b'Fred over Bruno G will be the achilles of this Selecao...  #CMRBRA  #FIFAWorldCup  #Brazil  #WorldCup',b'GeehSport',"['CMRBRA', 'FIFAWorldCup', 'Brazil', 'WorldCup']",Here and Now,91,0,0,neutral
+
+2022-12-02 20:45:46+00:00,b'#Samson vs #Rishabh \xf0\x9f\x94\xa5 who would you pick ? https://t.co/cltprqyfuX   #samson #sanjusamson #rishabhpant \xe2\x81\xa6@BCCI\xe2\x81\xa9 #crickettwitter #odi #worldcup \xe2\x81\xa6@IamSanjuSamson\xe2\x81\xa9 \xe2\x81\xa6@RishabhPant17\xe2\x81\xa9',b'YourPod5',"['Samson', 'Rishabh', 'samson', 'sanjusamson', 'rishabhpant', 'crickettwitter', 'odi', 'worldcup']",,108,0,0,negative
+
+2022-12-02 20:45:41+00:00,b'@soodlesnoodles @Hunger4Crypto I like Algorand cos we are damn bullish in this WorldCup tournament season Lol\xf0\x9f\xa4\xa3\xf0\x9f\xa4\xa3',b'hub_tem',[],,326,0,0,positive
+
+2022-12-02 20:45:26+00:00,b'Congratulations to those that made it to the round of 16. Looking forward to an entertaining worldcup tournament.  #Blackstars\xe2\x80\xafI still love you. Better luck next time . #WorldCup',b'byWSDM',"['Blackstars', 'WorldCup']","Accra, Ghana",361,0,0,positive
+
+2022-12-02 20:45:22+00:00,"b""Why have Brazil's set pieces been so poor? Anyone? #worldcup #Qatar2022  #CMRBRA""",b'WorldCupFinal',"['worldcup', 'Qatar2022', 'CMRBRA']",Qatar,12559,0,0,negative
+
+2022-12-02 20:45:15+00:00,b'Both Cameroon and Brazil(Not Really) be like\xe2\x80\xa6 #WorldCup\xe2\x98\xb9\xef\xb8\x8f #F\xc3\xbatbolBlues #ThatQatarLife https://t.co/HOd6OLJCQD',b'cowriot',"['WorldCup', 'FútbolBlues', 'ThatQatarLife']",Listening To Music Somewhere,1028,0,0,negative
+
+2022-12-02 20:45:12+00:00,b'When your team is out but you\xe2\x80\x99re still watching the #WorldCup https://t.co/pUEGgkAS71',b'wearemitu',['WorldCup'],all over the internet!,38108,1,2,neutral
+
+2022-12-02 20:45:10+00:00,b'Let\xe2\x80\x99s go Serbia \xf0\x9f\x87\xb7\xf0\x9f\x87\xb8 need an equalizer. #FIFAWorldCup #WorldCup',b'DeadMoneyMedia',"['FIFAWorldCup', 'WorldCup']","Lake Tahoe, NV, USA",12,0,0,neutral
+
+2022-12-02 20:45:10+00:00,"b'Watching Brazil #WorldCup game  Me: aye Bruno!  Mari: Papi, we don\xe2\x80\x99t talk about Bruno #MariGems #Encanto'",b'SamSpeakerGuy',"['WorldCup', 'MariGems', 'Encanto']","South Bend, IN",1871,0,0,neutral
+
+2022-12-02 20:45:09+00:00,"b""\xf0\x9f\x8e\xb6He's electric signed on a free from Celtic, does things you've never expected Olivier Ntcham\xf0\x9f\x8e\xb6 #CMR\xe2\x80\xaf\xe2\x80\xaf\xe2\x80\xaf @SwansOfficial #BRA\xe2\x80\xaf\xe2\x80\xaf\xe2\x80\xaf#worldcup https://t.co/6UEGyeLNLR""",b'chefo1983',"['CMR', 'BRA', 'worldcup']",Neath 70 of 92 ,128,0,0,positive
+
+2022-12-02 20:45:08+00:00,"b'There are no great great players, but as a team, the #Sui are just so effective and amazing. #FIFAWorldCup #WorldCup #suisrb #SRBSUI'",b'rajsaiya',"['Sui', 'FIFAWorldCup', 'WorldCup', 'suisrb', 'SRBSUI']","Mumbai, India",44,0,1,positive
+
+2022-12-02 20:45:00+00:00,"b""England's next opponents Senegal will be full of confidence when the nations meet in Qatar on Sunday - and are no strangers to producing a major #WorldCup shock.  \xe2\x9a\xbd Read more about the match: https://t.co/pxG9ge9JJC https://t.co/w5qfQdfHME""",b'SkyNews',['WorldCup'],"London, UK",8247885,3,10,negative
+
+2022-12-02 20:45:00+00:00,"b""Ritsu Doan Helps japan to lead their Group .  How do you rate Doan's performance ?  #japan #japanese #japanfootball #japanteam #teamjapan #doanritsu #ritsudoan #fribourg #scfribourg #football #worldcup #fifaworldcup2022 #Qatar2022 https://t.co/YxycuXhgFj""",b'TFObserver1',"['japan', 'japanese', 'japanfootball', 'japanteam', 'teamjapan', 'doanritsu', 'ritsudoan', 'fribourg', 'scfribourg', 'football', 'worldcup', 'fifaworldcup2022', 'Qatar2022']",,6,0,0,positive
+
+2022-12-02 20:44:59+00:00,b'The #WorldCup is a difficult time for us...  ...we just hope both teams have fun.  Good luck in the quarter finals \xe2\x9a\xbd\xf0\x9f\x8f\x86  #GoBrazil #GoUSA https://t.co/LuYvEQ8PAu',b'goDigibee',"['WorldCup', 'GoBrazil', 'GoUSA']"," Fort Lauderdale, Florida",79,0,0,positive
+
+2022-12-02 20:44:59+00:00,b'Turf is looking raggedy.#WorldCup',b'Fiordiligi5',['WorldCup'],WA-07,2825,0,0,neutral
+
+2022-12-02 20:44:57+00:00,b'#WorldCup: 9 places to watch the #USA take on the #Netherlands on Saturday https://t.co/Ixrfyy6EX5 #wftv @ussoccer @KNVB @ravpig @WOB_DTO https://t.co/dIyJUDiOJs',b'JasonKelly407',"['WorldCup', 'USA', 'Netherlands', 'wftv']","Orlando, Fla.",1643,0,0,neutral
+
+2022-12-02 20:44:56+00:00,b'\xe2\x80\x9cTo count the seeds in an apple is much easier than counting the apples in a seed.\xe2\x80\x9d  Heard that this morning from a great mentor &amp; friend.  So true when looking for &amp; evaluating talent. #business #WorldCup',b'markbothompson',"['business', 'WorldCup']","Winter Park, FL",81,1,0,positive
+
+2022-12-02 20:44:48+00:00,b'#TokoEkambi is no respecter of legends. I pity #DaniAlves here.  #brazil #WorldCup https://t.co/dC3pdkWLse',b'newsblenda',"['TokoEkambi', 'DaniAlves', 'brazil', 'WorldCup']",Worldwide,10229,0,1,negative
+
+2022-12-02 20:44:48+00:00,b'I think it\xe2\x80\x99s safe to say who @RicFlairNatrBoy\xe2\x80\x99s favorite player is in the #WorldCup   His first name is Christopher  His last name is #WOOH! https://t.co/0pelMquRzs',b'CoachingChanges',"['WorldCup', 'WOOH']",,23404,0,0,positive
+
+2022-12-02 20:44:47+00:00,b'The Serbian coach looks like he drives livestock around Cavan/ Monaghan #WorldCup',b'ain_party',['WorldCup'],Dublin 3,74,0,0,positive
+
+2022-12-02 20:44:42+00:00,"b'@timayatimaya Hell no, you don\xe2\x80\x99t talk like that Ghana defeated Nigeria to make to the worldcup, that\xe2\x80\x99s hard work you know, because they won Nigeria doesn\xe2\x80\x99t mean we shouldn\xe2\x80\x99t support them at the World Cup, remember we are brothers first. @ghanafaofficial until naija fix its problem.'",b'adamsbulama',[],Lagos-Nigeria,10967,0,0,negative
+
+2022-12-02 20:44:39+00:00,b'Will they succeed? \xf0\x9f\xa4\xa8   #SERSWI #SerbiaSwitzerland #Serbia #Mitrovic #Switzerland #Xhaka #WorldCup #WC2022 #WK2022 #WC #WK #Qatar2022 #FIFAWorldCup #betFIRST #Live #SERSUI',b'betfirst',"['SERSWI', 'SerbiaSwitzerland', 'Serbia', 'Mitrovic', 'Switzerland', 'Xhaka', 'WorldCup', 'WC2022', 'WK2022', 'WC', 'WK', 'Qatar2022', 'FIFAWorldCup', 'betFIRST', 'Live', 'SERSUI']",Belgium,3913,0,0,positive
+
+2022-12-02 20:44:35+00:00,b'Mitrovi\xc4\x87 would complain if he was hung with a new rope. #WorldCup https://t.co/TBAuyES582',b'potzrbe',['WorldCup'],The Unholy Realm,141,0,0,negative
+
+2022-12-02 20:44:31+00:00,b'Hearing the commentators say \xe2\x80\x98abou ba kar\xe2\x80\x99 is frustrating man. Can some help the commentators pronounce it right \xf0\x9f\x98\x82\xf0\x9f\x98\x82. #WorldCup #aboubakar #itv',b'onepiece_nawaz',"['WorldCup', 'aboubakar', 'itv']",,75,0,0,positive
+
+2022-12-02 20:44:30+00:00,"b'Lost my old tiktok cuz I done forgot my password, made a new one and the videos are better, mean alot if you could maybe check out the funny discord moments with my friends \xf0\x9f\x91\x89\xf0\x9f\x91\x88  #LeagueOfLegends #RainbowSixSiege #funnymoments #gamergirl #12am #UnFiltered #WorldCup #TikTok https://t.co/yRmSdAnRFJ'",b'Ioutta1',"['LeagueOfLegends', 'RainbowSixSiege', 'funnymoments', 'gamergirl', '12am', 'UnFiltered', 'WorldCup', 'TikTok']",,1,0,0,positive
+
+2022-12-02 20:44:23+00:00,b'Pple : Men don\xe2\x80\x99t cry. Football:Hold me beer \xf0\x9f\x8d\xba\xf0\x9f\x8d\xbb\xf0\x9f\x8d\xbb\xf0\x9f\x98\x82\xf0\x9f\x98\x82#worldcup #bigziki https://t.co/KTTL1qBFAt',b'IsaacOkoro13',"['worldcup', 'bigziki']","Lagos, Nigeria",32,0,0,negative
+
+2022-12-02 20:44:15+00:00,b'Helen #WorldCup Theodore #\xe4\xb8\x96\xe7\x95\x8c\xe6\x9d\xaf Strong #\xe6\x8d\x9e\xe5\x81\x8f\xe9\x97\xa8 Dwayne #\xe4\xb8\x96\xe7\x95\x8c\xe6\x9d\xaf\xe6\x8a\x95\xe6\xb3\xa8  https://t.co/B4IFnBOEeY',b'Kemberl88045158',"['WorldCup', '世界杯', '捞偏门', '世界杯投注']",,0,0,0,positive
+
+2022-12-02 20:44:11+00:00,"b'""Great defending""  That\'s a penalty. Doesn\'t touch the ball and just clatter the man. #WorldCup'",b'liamjmulvey',['WorldCup'],,561,0,0,positive
+
+2022-12-02 20:44:07+00:00,b'HES HERE PUSSY!! \xf0\x9f\x87\xa6\xf0\x9f\x87\xb1\xf0\x9f\x87\xa6\xf0\x9f\x87\xb1\xf0\x9f\x87\xa6\xf0\x9f\x87\xb1\xf0\x9f\x87\xa6\xf0\x9f\x87\xb1\xf0\x9f\x87\xa6\xf0\x9f\x87\xb1\xf0\x9f\x87\xa6\xf0\x9f\x87\xb1 @Avdiii333  SERBIAK #SERBIA #WORLDCUP https://t.co/O06Ypkq5h0',b'LiitoSav',"['SERBIA', 'WORLDCUP']",,198,0,0,neutral
+
+2022-12-02 20:44:05+00:00,b'OMG - massive upset in the #WorldCup today!! #ChatGPT #Antartica #Spain https://t.co/IPPciAcO4D',b'redunndant',"['WorldCup', 'ChatGPT', 'Antartica', 'Spain']",Michigan,340,0,0,negative
+
+2022-12-02 20:44:04+00:00,b'Rate the design please!!! Building awesome apps is my profession.  #Aminu #FIFAWorldCup #Amala Abraham #SpotifyCorrupt #WorldCup #flutter @FlutterLDN @FlutterPolice https://t.co/0sNTuHGH3V',b'victorhez4',"['Aminu', 'FIFAWorldCup', 'Amala', 'SpotifyCorrupt', 'WorldCup', 'flutter']",Remote,368,0,0,positive
+
+2022-12-02 20:44:04+00:00,b'Cameroon \xf0\x9f\x87\xa8\xf0\x9f\x87\xb2 Playing Rough As Hell \xf0\x9f\x98\x82\xf0\x9f\x98\x82 #WorldCup #FIFAWorldCupQatar2022',b'tinobest',"['WorldCup', 'FIFAWorldCupQatar2022']","Christ Church ,Barbados ",27138,0,1,positive
+
+2022-12-02 20:44:01+00:00,"b""\xe2\x8f\xb1\xef\xb8\x8f 85' | Serbia still needs two goals to go through... \xf0\x9f\x98\xac  \xf0\x9f\x87\xb7\xf0\x9f\x87\xb8 2 - 3\xf0\x9f\x87\xa8\xf0\x9f\x87\xad  #SERSWI #SerbiaSwitzerland #Serbia #Mitrovic #Switzerland #Xhaka #WorldCup #WC2022 #WK2022 #WC #WK #Qatar2022 #FIFAWorldCup #betFIRST #Live #SERSUI https://t.co/29T6CO3bJl""",b'betfirst',"['SERSWI', 'SerbiaSwitzerland', 'Serbia', 'Mitrovic', 'Switzerland', 'Xhaka', 'WorldCup', 'WC2022', 'WK2022', 'WC', 'WK', 'Qatar2022', 'FIFAWorldCup', 'betFIRST', 'Live', 'SERSUI']",Belgium,3913,1,0,negative
+
+2022-12-02 20:44:00+00:00,"b'#Aboubakar could not allow #Martinelli go, took one for the team and headed away the resultant free kick. What a player and a leader \xf0\x9f\x98\x82\xf0\x9f\x98\x82  #CAMBRA #WorldCup'",b'Bahatism',"['Aboubakar', 'Martinelli', 'CAMBRA', 'WorldCup']","Kampala, Uganda",891,0,0,positive
+
+2022-12-02 20:43:55+00:00,"b""Why they subbed off rodrygo instead of Antony, he deserves time, he also playin well and Antony is not delivering, Tete don't make say the damn word  #Rodrygo #FIFAWorldCup #WorldCup #FIFAWorldCup2022 #QatarWorldCup2022 #Qatar #BrazilvsCameroon #Brazil https://t.co/xryTL9b4FG""",b'IronsideAloy',"['Rodrygo', 'FIFAWorldCup', 'WorldCup', 'FIFAWorldCup2022', 'QatarWorldCup2022', 'Qatar', 'BrazilvsCameroon', 'Brazil']",Atlanta Georgia ,30,0,0,negative
+
+2022-12-02 20:43:55+00:00,b'Finally got one #Mudryk #shakhtar @PaniniAmerica #adrenalineXL #cardpack #soccer #packs #cardopening #football #collection #collector #cardcollector #Panini #FIFAWorldCup2022 #fifa #sportscards #sports #soccercards #FIFAWorldCup #CARDS #WorldCup #matchattax https://t.co/PTD6hbeScA',b'Barca30115580',"['Mudryk', 'shakhtar', 'adrenalineXL', 'cardpack', 'soccer', 'packs', 'cardopening', 'football', 'collection', 'collector', 'cardcollector', 'Panini', 'FIFAWorldCup2022', 'fifa', 'sportscards', 'sports', 'soccercards', 'FIFAWorldCup', 'CARDS', 'WorldCup', 'matchattax']",,17,0,0,neutral
+
+2022-12-02 20:43:48+00:00,b'Soccer is so gay #worldcup',b'sendmeetomars',['worldcup'],"Sioux Falls, SD",140,0,0,neutral
+
+2022-12-02 20:43:46+00:00,"b""@maroofali066 @quqiqool777 Yea I'm watching the match it's biggest upset yaar Serbia ziada deserv karta he \xf0\x9f\x98\x8f\xf0\x9f\x98\xaa ajeeb worldcup tha es saal to""",b'HaidariHoda',[],,1041,0,0,negative
+
+2022-12-02 20:43:40+00:00,b'#BrazilvsCameroon Cameroon\xe2\x80\x99s defends trained with the Niners before this World Cup \xf0\x9f\x87\xa8\xf0\x9f\x87\xb2 #WorldCup',b'mhmmd_mp4',"['BrazilvsCameroon', 'WorldCup']","Redwood City, CA",6,0,0,neutral
+
+2022-12-02 20:43:17+00:00,b'The refs for the Brazil game #WorldCup https://t.co/rd5kcHGw1M',b'Jose_Mayaa',['WorldCup'],"California, USA",219,0,0,neutral
+
+2022-12-02 20:43:15+00:00,b'Ancestress #Taiwan Patriotic #\xe4\xb8\x96\xe7\x95\x8c\xe6\x9d\xaf Constant #WorldCup Emeline #\xe5\x8d\xa1\xe5\xa1\x94\xe5\xb0\x94\xe4\xb8\x96\xe7\x95\x8c\xe6\x9d\xaf  https://t.co/Hcw2TMyafs',b'DawdaGayatri',"['Taiwan', '世界杯', 'WorldCup', '卡塔尔世界杯']",Markham,22,0,0,neutral
+
+2022-12-02 20:43:13+00:00,b'Teams that are knocked out of the #WorldCup   Wales (19) Iran (20) Mexico (13) Uruguay (14) Germany (11) Denmark (10)  Belgium (2)  Teams that are still in:  Australia (38)  #Facts',b'AaronKajanto',"['WorldCup', 'Facts']",,163,0,1,neutral
+
+2022-12-02 20:43:09+00:00,b'Going early but no team going through with nine points cannot have happened before.  #WorldCup',b'KFCQuarterPack',['WorldCup'],"Auckland, New Zealand.",340,0,0,negative
+
+2022-12-02 20:43:04+00:00,"b'Not to Lose  As I\xe2\x80\x99ve enjoyed the #WorldCup, I\xe2\x80\x99m reminded how easy it can be to get ahead in a match, before slipping into a dangerous trap. When applied to business, getting ahead and then playing not to lose can be seen all over the map.  https://t.co/CUki5yDcHp https://t.co/oCNXF6MwfQ'",b'BENovator',['WorldCup'],Midwest,3671,0,0,positive
+
+2022-12-02 20:43:01+00:00,b'My favourite video from the last 2 weeks at the World Cup \xf0\x9f\xa4\xa9 #rashford #freekick #england #WorldCup #FIFAWorldCup #QatarWorldCup2022 #englandvswales #englandvwales #englandfc https://t.co/KfykqGkK4v',b'AbiGreenwood3',"['rashford', 'freekick', 'england', 'WorldCup', 'FIFAWorldCup', 'QatarWorldCup2022', 'englandvswales', 'englandvwales', 'englandfc']",,1,0,0,neutral
+
