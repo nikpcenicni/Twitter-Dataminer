@@ -15,6 +15,14 @@ def get_user_info(name):
     user = api.get_user(screen_name=name)
     return user
 
+def Searchbykeyword(keyword):
+    tweets = api.search_tweets(q=keyword, count=NUM_TWEETS)
+    return tweets
+
+def Searchbyhashtag(hashtag):
+    tweets = api.search_tweets(q=hashtag, count=NUM_TWEETS)
+    return tweets
+
 def get_user_tweets(screen_name):
     # Gets tweets from user
     tweets = api.user_timeline(screen_name=screen_name, count=NUM_TWEETS, exclude_replies=True, include_rts=False)
@@ -36,7 +44,7 @@ def get_mentions(screen_name):
     return mentions
 
 def tweet_processing(tweets):
-    tweet_list = open("tweet_list.txt", "a")
+    tweet_list = open("tweet_list.txt", "w", encoding="utf-8")
     for tweet in tweets:
         tweet_list.write(tweet.text)
         tweet_list.write("\n")

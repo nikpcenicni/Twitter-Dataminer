@@ -6,9 +6,24 @@ from nltk.corpus import stopwords
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+import nltk
+
+import re, emoji
+
+
 
 def clean_tweets():
     text = open('tweet_list.txt', encoding='utf-8').read()
+    
+    text = text.replace('\r', '').replace('\n', ' ').replace('\n', ' ').lower() #remove \n and \r and lowercase
+    text = re.sub(r"(?:\@|https?\://)\S+", "", text) #remove links and mentions
+    text = re.sub(r'[^\x00-\x7f]',r'', text) #remove non utf8/ascii characters such as '\x9a\x91\x97\x9a\x97'
+    banned_list= string.punctuation + 'Ã'+'±'+'ã'+'¼'+'â'+'»'+'§'
+    table = str.maketrans('', '', banned_list)
+    text = text.translate(table)
+
+    # text = re.sub(emoji.get_emoji_regexp(), r"", text) #remove emoji
+
     lower_case = text.lower()
     cleaned_text = lower_case.translate(str.maketrans('', '', string.punctuation))
     return cleaned_text
@@ -54,8 +69,6 @@ def emotion_analysis(lemma_words):
     # print(w)
     return w
 
-
-
 def sentiment_analysis(sentiment_text):
     score = SentimentIntensityAnalyzer().polarity_scores(sentiment_text)
     if score['neg'] > score['pos']:
@@ -76,9 +89,7 @@ def graph_emotions(w):
     
 def analyse_tweets():
     cleaned_text = clean_tweets()
-    lemmatized_words = lemmatize_words(cleaned_text)
-    
-    return sentiment_analysis(lemmatized_words)
+    return sentiment_analysis(cleaned_text)
     # emotion_list = preprocess_text()
     # graph_emotions(emotion_list)
     # return

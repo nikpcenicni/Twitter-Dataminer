@@ -3,6 +3,17 @@ from twitter import *
 
 import os
 
+# import nltk
+# nltk.download('stopwords')
+# nltk.download('punkt')
+# nltk.download('wordnet')
+# nltk.download('omw-1.4')
+# nltk.download('averaged_perceptron_tagger')
+# nltk.download('vader_lexicon')
+# nltk.download('opinion_lexicon')
+# nltk.download('sentiwordnet')
+
+
 
 def reset():
     open("tweet_list.txt", "w").close()
@@ -43,6 +54,7 @@ def operations(screen_name):
         return None
 
 def user_information():
+
     screen_name = input("Enter a Twitter handle: ")
     # if screen_name[0] == '@':
     #     screen_name = screen_name[1:]
@@ -62,11 +74,24 @@ def show_graphs(emotions):
         graph_emotions(emotions)
 
 def main():
+
     
-    screen_name = user_information()
+    action = input("Enter 1 to analyze a user, or 2 to search by keyword: ")
+    if action == '1':
+        screen_name = user_information()    
+        tweets = operations(screen_name)
+        if tweets != None:
+            tweet_processing(tweets)
+            print("Tweets processed")
+            print("Analyzing tweets...")
+            emotions = preprocess_text()
+            print(f"Emotional associations: {emotions}")
+            print(sentiment_analysis(clean_tweets()))
+            show_graphs(emotions)
     
-    tweets = operations(screen_name)
-    if tweets != None:
+    elif action == '2':
+        keyword = input("Enter a keyword: ")
+        tweets = Searchbykeyword(keyword)
         tweet_processing(tweets)
         print("Tweets processed")
         print("Analyzing tweets...")
