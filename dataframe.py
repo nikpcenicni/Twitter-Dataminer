@@ -1,3 +1,9 @@
+#TO-DO:
+# Implement Naive Bayes Classifier
+# Implement Logistic Regression
+# Implement SVM
+
+
 #general purpose packages
 import numpy as np
 import pandas as pd
@@ -80,12 +86,7 @@ def create_CSV(hashtag_phrase):
                         tweet.user.followers_count, 
                         tweet.retweet_count, 
                         tweet.favorite_count,
-                        sentiment['compound']])
-        
-        #perform sentiment analysis for each tweet in the dataset.csv file and add the results to the dataset in a new column
-        # sentiment_analysis()
-
-    
+                        sentiment]) 
     #return file name
     return fname
 
@@ -112,6 +113,26 @@ def create_dataframe(fname):
     #tokenize with BertTokenizerFast
     tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
     df['tweet_text'] = df['tweet_text'].apply(lambda x: tokenizer.encode(x, add_special_tokens=True))
+
+    #balance classes in dataset with RandomOverSampler
+    #oversample the train test to remove bias towards the majority classes.
+    ros = RandomOverSampler(random_state=0)
+    X_resampled, y_resampled = ros.fit_resample(df['tweet_text'].values.reshape(-1,1), df['Sentiment'].values.reshape(-1,1))
+    df = pd.DataFrame(X_resampled, columns=['tweet_text'])
+    df['Sentiment'] = y_resampled
+
+    #split dataset into train and test
+    X_train, X_test, y_train, y_test = train_test_split(df['tweet_text'], df['Sentiment'], test_size=0.2, random_state=42)
+
+    #Improve accuracy of model by encoding labels with one hot encoding
+    le = preprocessing.LabelEncoder()
+    le.fit(y_train)
+    y_train = le.transform(y_train)
+    y_test = le.transform(y_test)
+
+    #pad sequences
+    X_train = tf.keras.preprocessing.sequence.pad_sequences(X_train, maxlen=128, padding='post')
+    X_test = tf.keras.preprocessing.sequence.pad_sequences(X_test, maxlen=128, padding='post')
 
     return df
 
@@ -148,6 +169,7 @@ def main():
     open('dataset.csv', 'w').close()
     df = create_dataframe(create_CSV("covid19"))
     df.info()
+
 
 if __name__ == "__main__":
     main()
