@@ -65,7 +65,7 @@ def create_CSV(hashtag_phrase):
         w = csv.writer(file)
         
         # Write header row (feature column names of your choice)
-        w.writerow(['timestamp', 'tweet_text', 'username', 'all_hashtags', 'location', 
+        w.writerow(['timestamp', 'tweet_OG', 'username', 'all_hashtags', 'location', 
                     'followers_count', 'retweet_count', 'favorite_count', 'Sentiment'])
        
         # For each tweet matching hashtag and write relevant info to the spreadsheet
@@ -94,36 +94,36 @@ def create_CSV(hashtag_phrase):
 
 def create_dataframe(fname):
     df = pd.read_csv('%s.csv' % fname)
-    df.drop_duplicates(subset ="tweet_text", keep = False, inplace = True) # remove duplicate tweets
+    df.drop_duplicates(subset ="tweet_OG", keep = False, inplace = True) # remove duplicate tweets
     df['timestamp'] = pd.to_datetime(df['timestamp'])     #change timestamp to datetime
 
     #clean tweets
-    df['tweet_text'] = df['tweet_text'].apply(clean_tweet)
+    df['tweet_OG'] = df['tweet_OG'].apply(clean_tweet)
 
     #remove stopwords
     stop_words = set(stopwords.words('english'))
-    df['tweet_text'] = df['tweet_text'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
+    df['tweet_OG'] = df['tweet_OG'].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop_words)]))
 
     #lemmatize
     lemmatizer = WordNetLemmatizer()
-    df['tweet_text'] = df['tweet_text'].apply(lambda x: ' '.join([lemmatizer.lemmatize(word) for word in x.split()]))
+    df['tweet_OG'] = df['tweet_OG'].apply(lambda x: ' '.join([lemmatizer.lemmatize(word) for word in x.split()]))
 
     #stemming
     stemmer = PorterStemmer()
-    df['tweet_text'] = df['tweet_text'].apply(lambda x: ' '.join([stemmer.stem(word) for word in x.split()]))
+    df['tweet_OG'] = df['tweet_OG'].apply(lambda x: ' '.join([stemmer.stem(word) for word in x.split()]))
 
     #drop tweets with with less than 3 words
-    df = df[df['tweet_text'].str.split().str.len() > 3]
+    df = df[df['tweet_OG'].str.split().str.len() > 3]
 
     #remove tweets with less than 3 characters
-    df = df[df['tweet_text'].str.len() > 3]
+    df = df[df['tweet_OG'].str.len() > 3]
 
     #shuffle dataframe and reset index
     df = df.sample(frac=1).reset_index(drop=True)
 
     #tokenize with BertTokenizerFast
     tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
-    df['tweet_text'] = df['tweet_text'].apply(lambda x: tokenizer.encode(x, add_special_tokens=True))
+    df['tweet_OG'] = df['tweet_OG'].apply(lambda x: tokenizer.encode(x, add_special_tokens=True))
 
     #create test set
     df_test = df.sample(frac=0.2, random_state=0)
@@ -132,16 +132,16 @@ def create_dataframe(fname):
     #balance classes in dataset with RandomOverSampler
     #oversample the train test to remove bias towards the majority classes.
     ros = RandomOverSampler(random_state=0)
-    x_train, y_train = ros.fit_resample(df['tweet_text'].values.reshape(-1,1), df['Sentiment'].values.reshape(-1,1))
-    train_os = pd.DataFrame(list(zip([x[0] for x in x_train], y_train)), columns = ['tweet_text', 'Sentiment']);
+    x_train, y_train = ros.fit_resample(df['tweet_OG'].values.reshape(-1,1), df['Sentiment'].values.reshape(-1,1))
+    train_os = pd.DataFrame(list(zip([x[0] for x in x_train], y_train)), columns = ['tweet_OG', 'Sentiment']);
 
-    x = train_os['tweet_text'].values
+    x = train_os['tweet_OG'].values
     y = train_os['Sentiment'].values
 
     #split dataset into train and test
-    X_train, X_test, y_train, y_test = train_test_split(df['tweet_text'], df['Sentiment'], test_size=0.1, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(df['tweet_OG'], df['Sentiment'], test_size=0.1, random_state=42)
 
-    x_test = df_test['tweet_text'].values
+    x_test = df_test['tweet_OG'].values
     y_test = df_test['Sentiment'].values
 
     #create copies of the test set
