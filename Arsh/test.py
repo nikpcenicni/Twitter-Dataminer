@@ -119,9 +119,13 @@ def clean_data():
     df['Sentiment'] = df['tweet_OG'].apply(get_sentiment)
 
     #shuffle dataset and reset index
-    df['Sentiment'] = df['Sentiment'].map({'Extremely Negative':0,'Negative':0,'Neutral':1,'Positive':2,'Extremely Positive':2})
     df = df.sample(frac=1).reset_index(drop=True)
     df_test = df.copy()
+
+    df['Sentiment'] = df['Sentiment'].map({'Extremely Negative':0,'Negative':0,'Neutral':1,'Positive':2,'Extremely Positive':2})
+    df_test['Sentiment'] = df_test['Sentiment'].map({'Extremely Negative':0,'Negative':0,'Neutral':1,'Positive':2,'Extremely Positive':2})
+
+    print(df['Sentiment'].value_counts())
 
     #crossbalancing dataset using RandomOverSampler to create training x and y
     ros = RandomOverSampler(random_state=0)
@@ -138,9 +142,9 @@ def clean_data():
 
     
     #create copies of train, test and validation sets
-    y_train_le = X_train.copy()
-    y_test_le = X_test.copy()
-    y_valid_le = X_valid.copy()
+    y_train_le = y_train.copy()
+    y_test_le = y_test.copy()
+    y_valid_le = y_valid.copy()
 
     #encode with one hot encoding
     ohe = preprocessing.OneHotEncoder()
@@ -172,7 +176,7 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions))
     print()
     #classification report
-    print(classification_report(y_test_le, nb_predictions, target_names=['Negative', 'Neutral', 'Positive']))
+    print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
     print()
 
 
