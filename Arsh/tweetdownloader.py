@@ -5,21 +5,11 @@ import pandas as pd
 
 load_dotenv()
 
-NUM_TWEETS = 100
+NUM_TWEETS = 10000
 
 auth = tweepy.OAuthHandler(os.getenv("CONSUMER_KEY"), os.getenv("CONSUMER_SECRET"))
 
 api = tweepy.API(auth, wait_on_rate_limit=True)
-
-# df = pd.DataFrame({'timestamp': [],
-#                    'tweet_OG': [],
-#                    'username': [],
-#                    'all_hashtags': [],
-#                    'location': [],
-#                    'followers_count': [],
-#                    'retweet_count': [],
-#                    'favorite_count': [],
-#                    'Sentiment': []})
 
 def get_tweets(keyword):
     filename="tweets.csv"
