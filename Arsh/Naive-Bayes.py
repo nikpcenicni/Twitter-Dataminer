@@ -40,6 +40,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer#TFIDF vectorizer
 from sklearn.feature_extraction.text import CountVectorizer #Count vectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.metrics import confusion_matrix, classification_report #confusion matrix
+from sklearn.linear_model import LogisticRegression, _logistic
 
 #XGBoost
 from xgboost import XGBClassifier
@@ -75,54 +76,35 @@ df_neg = pd.DataFrame()
 df_hate = pd.DataFrame()
 df_offensive = pd.DataFrame()
 
-# model = 'hate-speech-and-offensive-language-detection'
-# #save model to current directory
-# model.save('hate-speech-and-offensive-language-detection')
+#hate speech detection library
+from hatesonar import Sonar
 
 # HATE SPEECH DETECTION DOES NOT WORK PROPERLY SINCE IT CANNOT LOCATE THE HATE SPEECH DETECTION MODEL
 
-#analyze df_neg and classify tweets as hate speech, offensive language, neither
+#analyze df_neg and classify tweets as hate speech, offensive language, neither using hatesonar
 # store hate speech tweets in df_hate
-def analyze_Hate(df_neg):
-    #load hate speech detection model
-    model = keras.models.load_model('hate-speech-and-offensive-language-detection')
-    #load tokenizer
-    with open('tokenizer.pickle', 'rb') as handle:
-        tokenizer = pickle.load(handle)
-
-    #tokenize tweets
-    X = tokenizer.texts_to_sequences(df_neg['tweet'])
-    X = tf.keras.preprocessing.sequence.pad_sequences(X, maxlen=100, padding='post', truncating='post')
-
-    #predict sentiment
-    y_pred = model.predict(X)
-    y_pred = np.argmax(y_pred, axis=1)
-
-    #store hate speech tweets in df_hate
-    for i in range(len(y_pred)):
-        if y_pred[i] == 0:
-            df_hate = df_hate.append(df_neg.iloc[i])
-    
-    #store offensive language tweets in df_offensive
-    for i in range(len(y_pred)):
-        if y_pred[i] == 1:
-            df_offensive = df_offensive.append(df_neg.iloc[i])
-
-    #classify tweets as hate speech, offensive language, neither
-    for i in range(len(y_pred)):
-        if y_pred[i] == 0:
-            df_neg['Sentiment'][i] = 'Hate Speech'
-        elif y_pred[i] == 1:
-            df_neg['Sentiment'][i] = 'Offensive Language'
+# store offensive language tweets in df_offensive
+def hate_Analysis(df_neg):
+    #analyze df_neg and classify tweets as hate speech, offensive language, neither using hatesonar
+    # store hate speech tweets in df_hate
+    # store offensive language tweets in df_offensive
+    sonar = Sonar()
+    for index, row in df_neg.iterrows():
+        result = sonar.ping(text=row['tweet_OG'])
+        if result['classes'][0]['confidence'] > 0.5:
+            df_hate = df_hate.append(row, ignore_index=True)
+        elif result['classes'][1]['confidence'] > 0.5:
+            df_offensive = df_offensive.append(row, ignore_index=True)
         else:
-            df_neg['Sentiment'][i] = 'Neither'
-
+            continue
+    
     #show users with the most hate speech tweets
     most_hate(df_hate)
 
     #show users with the most offensive language tweets
     most_offensive(df_offensive)
 
+    
 #Show users with the most hate speech tweets
 def most_hate(df_hate):
     #show users with the most hate speech tweets
@@ -145,6 +127,10 @@ def most_offensive(df_offensive):
 
 def bar_chart(df):
     #create bar chart
+    #show labels as string values instead of numbers where 0 = negative, 1 = neutral, 2 = positive
+    #create copy of df
+    df_copy = df.copy()
+    df_copy['Sentiment'].replace({0:'Negative', 1:'Neutral', 2:'Positive'}, inplace=True)
     plt.figure(figsize=(8,6))
     sns.countplot(df['Sentiment'])
     plt.xlabel('Sentiment')
@@ -211,7 +197,7 @@ def clean_data(fname):
     
     #perform sentiment analysis on tweets
     df['Sentiment'] = df['tweet_OG'].apply(get_sentiment)
-
+    
     #shuffle dataset and reset index
     df = df.sample(frac=1).reset_index(drop=True)
     df_test = df.copy()
@@ -268,11 +254,11 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
 
     nb_predictions = nb_classifier.predict(X_test_tf)
 
-    print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions))
-    print()
-    #classification report
-    print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
-    print()
+    # print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions))
+    # print()
+    # #classification report
+    # print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
+    # print()
 
     #create dataframe of negative tweets
     df_neg = pd.DataFrame(list(zip(X_test, nb_predictions)), columns = ['tweet_OG', 'Sentiment'])
@@ -280,19 +266,18 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     df_neg = df_neg.reset_index(drop=True)
 
 
-    #confusion matrix
-    cm = confusion_matrix(y_test_le, nb_predictions)
-    # print(cm)
-    #plot confusion matrix
-    plt.figure(figsize=(10,7))
-    sns.heatmap(cm, annot=True)
-    plt.xlabel('Predicted')
-    plt.ylabel('Truth')
-    plt.show()
+    # #confusion matrix
+    # cm = confusion_matrix(y_test_le, nb_predictions)
+    # # print(cm)
+    # #plot confusion matrix
+    # plt.figure(figsize=(10,7))
+    # sns.heatmap(cm, annot=True)
+    # plt.xlabel('Predicted')
+    # plt.ylabel('Truth')
+    # plt.show()
 
-    #call analyze function
-    analyze_Hate(df_neg)
-
+    #perform hate speech detection on negative tweets
+    hate_Analysis(df_neg)
 
 def get_sentiment(tweet):
     #get sentiment using vaderSentiment and classify tweets as extreme positive, positive, neutral, negative, extreme negative
@@ -384,8 +369,8 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
 def main():
     # create_CSV()
     df = clean_data('tweets.csv')
-    wordcloud(df)
-    bar_chart(df)
+    # wordcloud(df)
+    # bar_chart(df)
     # df.info()
     # print(df.head())
 
