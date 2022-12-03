@@ -42,6 +42,8 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.metrics import confusion_matrix, classification_report #confusion matrix
 from sklearn.linear_model import LogisticRegression, _logistic
 
+from sklearn.utils import metaestimators
+
 #XGBoost
 from xgboost import XGBClassifier
 
@@ -88,6 +90,7 @@ def hate_Analysis(df_neg):
     #analyze df_neg and classify tweets as hate speech, offensive language, neither using hatesonar
     # store hate speech tweets in df_hate
     # store offensive language tweets in df_offensive
+    print('Hate Speech Analysis')
     sonar = Sonar()
     for index, row in df_neg.iterrows():
         result = sonar.ping(text=row['tweet_OG'])
@@ -169,6 +172,7 @@ def create_CSV(fname):
 
 #clean data 
 def clean_data(fname):
+    print('Cleaning Data')
     df = pd.read_csv(fname)
     df.drop_duplicates(subset ="tweet_OG", keep = False, inplace = True) # remove duplicate tweets
     df['timestamp'] = pd.to_datetime(df['timestamp'])     #change timestamp to datetime
@@ -210,7 +214,7 @@ def clean_data(fname):
     #crossbalancing dataset using RandomOverSampler to create training x and y
     ros = RandomOverSampler(random_state=0)
     train_x, train_y = ros.fit_resample(np.array(df['tweet_OG']).reshape(-1, 1), np.array(df['Sentiment']).reshape(-1, 1))
-    train_os = pd.DataFrame(list(zip([x[0] for x in train_x], train_y)), columns = ['tweet_OG', 'Sentiment']);
+    train_os = pd.DataFrame(list(zip([x[0] for x in train_x], train_y)), columns = ['tweet_OG', 'Sentiment'])
 
     #split dataset into train, test and validation sets
     X = train_os['tweet_OG']
@@ -235,10 +239,35 @@ def clean_data(fname):
     print(f"TRAINING DATA: {X_train.shape[0]}\nVALIDATION DATA: {X_valid.shape[0]}\nTESTING DATA: {X_test.shape[0]}" )
     print()
 
+    #save train, test and validation sets to csv files
+    train = pd.DataFrame(list(zip(X_train, y_train_le)), columns = ['tweet_OG', 'Sentiment'])
+    train.to_csv('train.csv', index=False)
+    valid = pd.DataFrame(list(zip(X_valid, y_valid_le)), columns = ['tweet_OG', 'Sentiment'])
+    valid.to_csv('valid.csv', index=False)
+    test = pd.DataFrame(list(zip(X_test, y_test_le)), columns = ['tweet_OG', 'Sentiment'])
+    test.to_csv('test.csv', index=False)
+
     #call naive_bayes function
     naive_bayes(X_train, X_test, y_train_le, y_test_le)
 
     return df
+
+#function to retrieve x and y values from train, test and validation sets stored in csv files
+def get_data():
+    df_train = pd.read_csv('train.csv')
+    df_valid = pd.read_csv('valid.csv')
+    df_test = pd.read_csv('test.csv')
+
+    X_train = df_train['tweet_OG'].values
+    y_train_le = df_train['Sentiment'].values
+
+    X_valid = df_valid['tweet_OG'].values
+    y_valid = df_valid['Sentiment'].values
+
+    X_test = df_test['tweet_OG'].values
+    y_test_le = df_test['Sentiment'].values
+
+    return X_train, y_train_le, X_valid, y_valid, X_test, y_test_le
 
 def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     clf = CountVectorizer()
@@ -299,6 +328,7 @@ def stem(text):
     return ' '.join([stemmer.stem(word) for word in text.split()])
 
 def clean_tweet(tweet):
+    print("Cleaning tweets...")
     tweet = re.sub(r"(?:\@|https?\://)\S+", "", tweet) #remove links and mentions
     tweet = re.sub(r'[^\x00-\x7f]',r'', tweet) #remove non utf8/ascii characters such as '\x9a\x91\x97\x9a\x97'
     banned_list= string.punctuation + 'Ã'+'±'+'ã'+'¼'+'â'+'»'+'§'
@@ -368,7 +398,11 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
 
 def main():
     # create_CSV()
-    df = clean_data('tweets.csv')
+    # df = clean_data('tweets.csv')
+    #get values from csv file with get_data() 
+    X_train, y_train_le, X_valid, y_valid, X_test, y_test_le = get_data()
+    #run naive bayes classifier
+    naive_bayes(X_train,X_test, y_train_le, y_test_le)
     # wordcloud(df)
     # bar_chart(df)
     # df.info()
