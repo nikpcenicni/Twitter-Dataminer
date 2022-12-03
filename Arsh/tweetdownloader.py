@@ -34,7 +34,7 @@ def get_tweets(keyword):
                    'favorite_count': [],
                    'Sentiment': []})
     else:
-        df = pd.read_csv('tweet_list.csv')
+        df = pd.read_csv(filename)
 
     # df = pd.read_csv('dataset1.csv', encoding='utf-8')
     #connect to twitter api
