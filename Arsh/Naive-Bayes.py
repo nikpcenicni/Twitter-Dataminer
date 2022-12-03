@@ -153,15 +153,15 @@ def bar_chart(df):
     plt.show()
 
 #extract tweets from twitter using tweepy and store in csv file
-def create_CSV():
+def create_CSV(fname):
     #connect to twitter api
     from dotenv import load_dotenv
     load_dotenv
     auth = tweepy.OAuthHandler(os.getenv("CONSUMER_KEY"), os.getenv("CONSUMER_SECRET"))
     api = tweepy.API(auth, wait_on_rate_limit=True)
 
-    #name of csv file to be created
-    fname = "dataset.csv"
+    # #name of csv file to be created
+    # fname = "dataset.csv"
 
     #open csv file
     with open(fname, 'w', encoding='utf-8') as file:
@@ -182,8 +182,8 @@ def create_CSV():
     file.close()
 
 #clean data 
-def clean_data():
-    df = pd.read_csv('dataset1.csv')
+def clean_data(fname):
+    df = pd.read_csv(fname)
     df.drop_duplicates(subset ="tweet_OG", keep = False, inplace = True) # remove duplicate tweets
     df['timestamp'] = pd.to_datetime(df['timestamp'])     #change timestamp to datetime
 
@@ -291,7 +291,7 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     plt.show()
 
     #call analyze function
-    analyze(df_neg)
+    analyze_Hate(df_neg)
 
 
 def get_sentiment(tweet):
@@ -383,7 +383,7 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
 
 def main():
     # create_CSV()
-    df = clean_data()
+    df = clean_data('tweets.csv')
     wordcloud(df)
     bar_chart(df)
     # df.info()
