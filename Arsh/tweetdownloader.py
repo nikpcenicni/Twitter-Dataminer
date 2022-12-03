@@ -22,7 +22,9 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 #                    'Sentiment': []})
 
 def get_tweets(keyword):
-    df = pd.DataFrame({'timestamp': [],
+    filename="tweets.csv"
+    if (not os.path.exists(filename)):
+        df = pd.DataFrame({'timestamp': [],
                    'tweet_OG': [],
                    'username': [],
                    'all_hashtags': [],
@@ -31,6 +33,8 @@ def get_tweets(keyword):
                    'retweet_count': [],
                    'favorite_count': [],
                    'Sentiment': []})
+    else:
+        df = pd.read_csv('tweet_list.csv')
 
     # df = pd.read_csv('dataset1.csv', encoding='utf-8')
     #connect to twitter api
@@ -41,6 +45,6 @@ def get_tweets(keyword):
         # timestamp,tweet_OG,username,all_hashtags,location,followers_count,retweet_count,favorite_count,Sentiment
         # df.append(new_row, tweet.full_text)
         df.loc[len(df.index)] = [tweet.created_at, tweet.full_text, tweet.user.screen_name, tweet.entities['hashtags'], tweet.user.location, tweet.user.followers_count, tweet.retweet_count, tweet.favorite_count, '']
-    df.to_csv('dataset1.csv',index=False, encoding='utf-8')
+    df.to_csv(filename,index=False, encoding='utf-8')
         
 get_tweets("World Cup")
