@@ -75,9 +75,11 @@ df_neg = pd.DataFrame()
 df_hate = pd.DataFrame()
 df_offensive = pd.DataFrame()
 
-model = 'hate-speech-and-offensive-language-detection'
-#save model to current directory
-model.save('hate-speech-and-offensive-language-detection')
+# model = 'hate-speech-and-offensive-language-detection'
+# #save model to current directory
+# model.save('hate-speech-and-offensive-language-detection')
+
+# HATE SPEECH DETECTION DOES NOT WORK PROPERLY SINCE IT CANNOT LOCATE THE HATE SPEECH DETECTION MODEL
 
 #analyze df_neg and classify tweets as hate speech, offensive language, neither
 # store hate speech tweets in df_hate
