@@ -1,22 +1,46 @@
 import tweepy
 import os
 from dotenv import load_dotenv
+import pandas as pd
 
 load_dotenv()
 
-NUM_TWEETS = 100000
+NUM_TWEETS = 100
 
 auth = tweepy.OAuthHandler(os.getenv("CONSUMER_KEY"), os.getenv("CONSUMER_SECRET"))
 
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
-def get_tweets():
+# df = pd.DataFrame({'timestamp': [],
+#                    'tweet_OG': [],
+#                    'username': [],
+#                    'all_hashtags': [],
+#                    'location': [],
+#                    'followers_count': [],
+#                    'retweet_count': [],
+#                    'favorite_count': [],
+#                    'Sentiment': []})
+
+def get_tweets(keyword):
+    df = pd.DataFrame({'timestamp': [],
+                   'tweet_OG': [],
+                   'username': [],
+                   'all_hashtags': [],
+                   'location': [],
+                   'followers_count': [],
+                   'retweet_count': [],
+                   'favorite_count': [],
+                   'Sentiment': []})
+
+    # df = pd.read_csv('dataset1.csv', encoding='utf-8')
     #connect to twitter api
     from dotenv import load_dotenv
     load_dotenv
     #search for tweets with the hashtag or keyword = 'WorldCup'
-    for tweet in tweepy.Cursor(api.search, q='#WorldCup', lang='en', tweet_mode='extended').items(1000):
-        print(tweet.full_text)
+    for tweet in tweepy.Cursor(api.search_tweets, q=keyword, lang='en', tweet_mode='extended').items(NUM_TWEETS):
+        # timestamp,tweet_OG,username,all_hashtags,location,followers_count,retweet_count,favorite_count,Sentiment
+        # df.append(new_row, tweet.full_text)
+        df.loc[len(df.index)] = [tweet.created_at, tweet.full_text, tweet.user.screen_name, tweet.entities['hashtags'], tweet.user.location, tweet.user.followers_count, tweet.retweet_count, tweet.favorite_count, '']
+    df.to_csv('dataset1.csv',index=False, encoding='utf-8')
         
-        
-get_tweets()
+get_tweets("World Cup")
