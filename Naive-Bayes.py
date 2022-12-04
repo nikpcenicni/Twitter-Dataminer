@@ -97,27 +97,45 @@ def hate_Analysis(df_neg):
             continue
     print(df_hate.head())
     print(df_offensive.head())
-    #most_hate(df_hate)
-    #most_offensive(df_offensive)
+    most_hate(df_hate)
+    most_offensive(df_offensive)
     
     
     
 #Show users with the most hate speech tweets
 def most_hate(df_hate):
     n = 10
-    df_hate['username'].value_counts()[:n].plot(kind='barh', figsize=(10, 5))
-    #df_hate.groupby('username').size().sort_values(ascending=False).head(10).plot(kind='barh', figsize=(10, 5))
-    #show users with the most hate speech tweets
-    # plt.figure(figsize=(8,6))
-    # sns.countplot(df_hate['username'])
-    # plt.xlabel('User')
-    # plt.ylabel('Number of Tweets')
-    # plt.title('Most Hate Speech Tweets')
-    # plt.show()
+    mostCommonUsers = df_hate['username'].value_counts()[:n].index.tolist()
+    occurences = df_hate['username'].value_counts()[:n].tolist()
+    
+    print(mostCommonUsers)
+    print(occurences)
+    #df = df_hate.loc[df_hate['username'].isin(mostCommonUsers)].groupby('username').size()
 
+    plt.bar(mostCommonUsers, occurences, width = 0.8, color = 'red')
+    plt.xlabel('Users')
+    plt.ylabel('Number of Tweets')
+    plt.show()
+    
 #Show users with the most offensive language tweets
 def most_offensive(df_offensive):
-    df_hate.groupby('username').size().sort_values(ascending=False).head(100).plot(kind='barh', figsize=(10, 5))
+    n = 10
+    mostCommonUsers = df_offensive['username'].value_counts()[:n].index.tolist()
+    occurences = df_offensive['username'].value_counts()[:n].tolist()
+                            
+    print(mostCommonUsers)
+    print(occurences)
+    
+    plt.bar(mostCommonUsers, occurences, width = 0.8, color = ['red', 'green'])
+    plt.xlabel('Users')
+    plt.ylabel('Number of Tweets')
+    plt.show()
+    #df = df_offensive.loc[df_hate['username'].isin(mostCommonUsers)].groupby('username').size()    
+    # plt.bar(mostCommonUsers, df, width = 0.8, color = 'red')
+    # plt.xlabel('Users')
+    # plt.ylabel('Number of Tweets')
+    # plt.show()
+    # df_hate.groupby('username').size().sort_values(ascending=False).head(100).plot(kind='barh', figsize=(10, 5))
 
 def bar_chart(df):
     #create bar chart
