@@ -81,32 +81,51 @@ df_offensive = pd.DataFrame()
 #hate speech detection library
 from hatesonar import Sonar
 
+from hatespeech import train_classifier, classify
+
 # HATE SPEECH DETECTION DOES NOT WORK PROPERLY SINCE IT CANNOT LOCATE THE HATE SPEECH DETECTION MODEL
 
 #analyze df_neg and classify tweets as hate speech, offensive language, neither using hatesonar
 # store hate speech tweets in df_hate
 # store offensive language tweets in df_offensive
+# def hate_Analysis(df_neg):
+#     #analyze df_neg and classify tweets as hate speech, offensive language, neither using hatesonar
+#     # store hate speech tweets in df_hate
+#     # store offensive language tweets in df_offensive
+#     print('Hate Speech Analysis')
+#     sonar = Sonar()
+#     for index, row in df_neg.iterrows():
+#         result = sonar.ping(text=row['tweet_OG'])
+#         if result['classes'][0]['confidence'] > 0.5:
+#             df_hate = df_hate.append(row, ignore_index=True)
+#         elif result['classes'][1]['confidence'] > 0.5:
+#             df_offensive = df_offensive.append(row, ignore_index=True)
+#         else:
+#             continue
+    
+#     #show users with the most hate speech tweets
+#     most_hate(df_hate)
+
+#     #show users with the most offensive language tweets
+#     most_offensive(df_offensive)
+
 def hate_Analysis(df_neg):
-    #analyze df_neg and classify tweets as hate speech, offensive language, neither using hatesonar
-    # store hate speech tweets in df_hate
-    # store offensive language tweets in df_offensive
-    print('Hate Speech Analysis')
-    sonar = Sonar()
+    cv, clf = train_classifier()
+    df_hate = pd.DataFrame()
+    df_offensive = pd.DataFrame()
+    
     for index, row in df_neg.iterrows():
-        result = sonar.ping(text=row['tweet_OG'])
-        if result['classes'][0]['confidence'] > 0.5:
+        result = classify(row['tweet_OG'], cv, clf)
+        if result == 'Hate Speech Detected':
             df_hate = df_hate.append(row, ignore_index=True)
-        elif result['classes'][1]['confidence'] > 0.5:
+        elif result == 'Offensive Language Detected':
             df_offensive = df_offensive.append(row, ignore_index=True)
         else:
             continue
-    
-    #show users with the most hate speech tweets
     most_hate(df_hate)
-
-    #show users with the most offensive language tweets
     most_offensive(df_offensive)
-
+    
+    
     
 #Show users with the most hate speech tweets
 def most_hate(df_hate):

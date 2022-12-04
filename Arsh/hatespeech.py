@@ -47,18 +47,17 @@ def clean_text(text):
     return text
 
 
-def classify(cv, clf, text):
+def classify(text, cv, clf):
     text = clean_text(text)
     text = cv.transform([text]).toarray()
-    return clf.predict(text)
+    return clf.predict(text)[0]
 
-# print (clf.score(x_test, y_test))
 
 def test():
     cv, clf = train_classifier()
-    classification = classify(cv, clf, "I hate you")
+    classification = classify("I hate you",cv, clf)
     print(classification)
-    classification = classify(cv, clf, "Kill yourself")
+    classification = classify("Kill yourself", cv, clf)
     print(classification)
 
-test()
+# test()
