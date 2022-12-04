@@ -16,7 +16,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 out_user = 'users.csv'
 out_followers = 'followers.csv'
 out_skip = 'skipped.csv'
-
+out_name = 'id.csv'
 def build_network(username):
     # Setting up data frames with initial user
     user = api.get_user(screen_name=username)
@@ -26,7 +26,8 @@ def build_network(username):
         'id':user.id,
         'friends_count':user.friends_count,
         'followers_count':user.followers_count}
-    master_followers = pd.DataFrame({'id':user.id,'followers':api.get_follower_ids(user_id=user.id)})
+    name_df = pd.DataFrame({'id':user.id},index=[0])
+    master_followers = pd.DataFrame({'to':user.id,'from':api.get_follower_ids(user_id=user.id)})
     master_user_details = pd.DataFrame([user_details])
 
     # Setting up skip_listlist
@@ -38,9 +39,10 @@ def build_network(username):
     master_user_details.to_csv(out_user,index=False)
     master_followers.to_csv(out_followers,index=False)
     skip_df.to_csv(out_skip,index=False)
+    name_df.to_csv(out_name,index=False)
 
     # Putting initial follower seed in queue
-    list(map(q.put,master_followers['followers']))
+    list(map(q.put,master_followers['from']))
     print (len(list(q.queue)))
 
     while not q.empty():
@@ -65,9 +67,11 @@ def build_network(username):
                     # Appending user data to master list
                     user_details = pd.DataFrame([user_details])
                     master_user_details = master_user_details.append(user_details)
+                    name = pd.DataFrame({'id':user.screen_name},index=[0])
+                    name_df = name_df.append(name)
                     
                     # Getting followers and appending to master list
-                    followers = pd.DataFrame({'id':user.id,'followers':api.get_follower_ids(user_id=user.id)})
+                    followers = pd.DataFrame({'from':user.id,'to':api.get_follower_ids(user_id=user.id)})
                     if followers.shape[0] > 200:
                         followers = followers.sample(200)
                     else:
@@ -75,13 +79,13 @@ def build_network(username):
                     master_followers = master_followers.append(followers)
                     
                     # Adding retrieved followers to queue
-                    list(map(q.put,followers['followers']))
+                    list(map(q.put,followers['to']))
                                 
                     # Exporting user and followers to CSV
                     user_details.to_csv(out_user,index=False,mode='a',header=False)
                     followers.to_csv(out_followers,index=False,mode='a',header=False)
                     skip_df.to_csv(out_skip,index=False,mode='a',header=False)
-                    
+                    name_df.to_csv(out_name,index=False,mode='a',header=False)
                     print (len(list(q.queue)))
                     
                 # Error handling
@@ -112,11 +116,11 @@ def resume_network(username):
 
     last_id = master_user_details['id'].tail(1)
     last_id = last_id.iloc[0]
-    last_id_idx = master_followers[master_followers['followers'] == last_id]
+    last_id_idx = master_followers[master_followers['to'] == last_id]
     last_id_idx = last_id_idx.head(1)
     last_id_idx = last_id_idx.index.values[0]
 
-    queue_list = list(master_followers['followers'].iloc[(last_id_idx+1):,])
+    queue_list = list(master_followers['to'].iloc[(last_id_idx+1):,])
 
     list(map(q.put,queue_list))
     print(len(list(q.queue)))
@@ -145,7 +149,7 @@ def resume_network(username):
                     master_user_details = master_user_details.append(user_details)
                     
                     # Getting followers and appending to master list
-                    followers = pd.DataFrame({'id':user.id,'followers':api.get_follower_ids(user_id=user.id)})
+                    followers = pd.DataFrame({'from':user.id,'to':api.get_follower_ids(user_id=user.id)})
                     if followers.shape[0] > 200:
                         followers = followers.sample(200)
                     else:
@@ -153,7 +157,7 @@ def resume_network(username):
                     master_followers = master_followers.append(followers)
                     
                     # Adding retrieved followers to queue
-                    list(map(q.put,followers['followers']))
+                    list(map(q.put,followers['to']))
                                 
                     # Exporting user and followers to CSV
                     user_details.to_csv(out_user,index=False,mode='a',header=False)
@@ -183,5 +187,5 @@ def resume_network(username):
 
 
 
-build_network('nikpcenicni')
+build_network('sawed_sajid')
 #resume_network('elonmusk')
