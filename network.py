@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 from jaal import Jaal
 from jaal.datasets import load_got
 from dash import html
+import networkx as nx
+from matplotlib.pyplot import figure
+import plotly.graph_objects as go
 
 
 q = Queue()
@@ -66,6 +69,8 @@ def build_network(username, type):
         u = q.get()
         if u in skip_list:
             continue
+        elif len(out_user) > 10 or len(out_followers) > 1000:
+            break
         else:
             try:
                 try:
@@ -124,7 +129,8 @@ def build_network(username, type):
                     
 
 
-def resume_network(username):
+def resume_network(username, type):
+    out_user, out_followers, out_skip = set_globals(type)
     # Setting up data frames with initial
     master_user_details = pd.read_csv(out_user)
     master_followers = pd.read_csv(out_followers)
@@ -202,15 +208,16 @@ def resume_network(username):
                         skip_df.to_csv(out_skip,index=False,mode='a',header=False)    
 
 
-def view_network():
+def view_network(type):
+    out_user, out_followers, out_skip = set_globals(type)
     # load the data
-    edge_df = pd.read_csv('Datasets/followers.csv')
-    #edge_df, node_df = load_got()
+    edge_df = pd.read_csv(out_followers)
     Jaal(edge_df).plot()
-    
 
-# build_network('nikpcenicni',"test")
+
+
+#build_network('QualleSharlene',"offensive")
 
 
 # #resume_network('elonmusk')
-# view_network()
+view_network("offensive")
