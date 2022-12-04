@@ -83,39 +83,13 @@ from hatesonar import Sonar
 
 from hatespeech import train_classifier, classify
 
-# HATE SPEECH DETECTION DOES NOT WORK PROPERLY SINCE IT CANNOT LOCATE THE HATE SPEECH DETECTION MODEL
-
-#analyze df_neg and classify tweets as hate speech, offensive language, neither using hatesonar
-# store hate speech tweets in df_hate
-# store offensive language tweets in df_offensive
-# def hate_Analysis(df_neg):
-#     #analyze df_neg and classify tweets as hate speech, offensive language, neither using hatesonar
-#     # store hate speech tweets in df_hate
-#     # store offensive language tweets in df_offensive
-#     print('Hate Speech Analysis')
-#     sonar = Sonar()
-#     for index, row in df_neg.iterrows():
-#         result = sonar.ping(text=row['tweet_OG'])
-#         if result['classes'][0]['confidence'] > 0.5:
-#             df_hate = df_hate.append(row, ignore_index=True)
-#         elif result['classes'][1]['confidence'] > 0.5:
-#             df_offensive = df_offensive.append(row, ignore_index=True)
-#         else:
-#             continue
-    
-#     #show users with the most hate speech tweets
-#     most_hate(df_hate)
-
-#     #show users with the most offensive language tweets
-#     most_offensive(df_offensive)
-
 def hate_Analysis(df_neg):
     cv, clf = train_classifier()
     df_hate = pd.DataFrame()
     df_offensive = pd.DataFrame()
     
     
-    for index, row in df_neg.iterrows():
+    for row in df_neg.iterrows():
         result = classify(row['tweet_OG'], cv, clf)
         if result == 'Hate Speech Detected':
             df_hate = df_hate.append(row, ignore_index=True)
@@ -125,30 +99,25 @@ def hate_Analysis(df_neg):
             continue
     print(df_hate.head())
     print(df_offensive.head())
-    most_hate(df_hate)
-    most_offensive(df_offensive)
+    #most_hate(df_hate)
+    #most_offensive(df_offensive)
     
     
     
 #Show users with the most hate speech tweets
 def most_hate(df_hate):
+    df_hate.groupby('username').size().sort_values(ascending=False).head(10).plot(kind='barh', figsize=(10, 5))
     #show users with the most hate speech tweets
-    plt.figure(figsize=(8,6))
-    sns.countplot(df_hate['username'])
-    plt.xlabel('User')
-    plt.ylabel('Number of Tweets')
-    plt.title('Most Hate Speech Tweets')
-    plt.show()
+    # plt.figure(figsize=(8,6))
+    # sns.countplot(df_hate['username'])
+    # plt.xlabel('User')
+    # plt.ylabel('Number of Tweets')
+    # plt.title('Most Hate Speech Tweets')
+    # plt.show()
 
 #Show users with the most offensive language tweets
 def most_offensive(df_offensive):
-    #show users with the most offensive language tweets
-    plt.figure(figsize=(8,6))
-    sns.countplot(df_offensive['username'])
-    plt.xlabel('User')
-    plt.ylabel('Number of Tweets')
-    plt.title('Most Offensive Language Tweets')
-    plt.show()
+    df_hate.groupby('username').size().sort_values(ascending=False).head(100).plot(kind='barh', figsize=(10, 5))
 
 def bar_chart(df):
     #create bar chart
@@ -424,7 +393,7 @@ def main():
     #get values from csv file with get_data() 
     X_train, y_train_le, X_valid, y_valid, X_test, y_test_le = get_data()
     #run naive bayes classifier
-    naive_bayes(X_train,X_test, y_train_le, y_test_le)
+    # naive_bayes(X_train,X_test, y_train_le, y_test_le)
     df = pd.read_csv('tweets.csv')
     hate_Analysis(df)
     # wordcloud(df)
