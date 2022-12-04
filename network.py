@@ -13,10 +13,10 @@ auth.set_access_token(os.getenv("ACCESS_TOKEN"), os.getenv("ACCESS_TOKEN_SECRET"
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
 # Output details
-out_user = 'users.csv'
-out_followers = 'followers.csv'
-out_skip = 'skipped.csv'
-out_name = 'id.csv'
+out_user = 'Datasets/users.csv'
+out_followers = 'Datasets/followers.csv'
+out_skip = 'Datasets/skipped.csv'
+out_name = 'Datasets/id.csv'
 def build_network(username):
     # Setting up data frames with initial user
     user = api.get_user(screen_name=username)

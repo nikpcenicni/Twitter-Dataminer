@@ -61,7 +61,7 @@ def create_CSV(hashtag_phrase):
     fname = "dataset"
     
     # Open the spreadsheet
-    with open('%s.csv' % (fname), 'w', encoding="utf-8") as file:
+    with open('Datasets/%s.csv' % (fname), 'w', encoding="utf-8") as file:
         w = csv.writer(file)
         
         # Write header row (feature column names of your choice)
@@ -93,7 +93,7 @@ def create_CSV(hashtag_phrase):
     return fname
 
 def create_dataframe(fname):
-    df = pd.read_csv('%s.csv' % fname)
+    df = pd.read_csv('Datasets/%s.csv' % fname)
     df.drop_duplicates(subset ="tweet_OG", keep = False, inplace = True) # remove duplicate tweets
     df['timestamp'] = pd.to_datetime(df['timestamp'])     #change timestamp to datetime
 
@@ -214,7 +214,7 @@ def clean_tweet(tweet):
 
 def main():
     #clear csv file
-    open('dataset.csv', 'w').close()
+    open('Datasets/dataset.csv', 'w').close()
     create_CSV("WorldCup")
     # df = create_dataframe(create_CSV("covid19"))
     # df.info()

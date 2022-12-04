@@ -13,7 +13,7 @@ def train_classifier():
     stemmer = nltk.SnowballStemmer('english')
 
 
-    hate = pd.read_csv('hatespeech.csv')
+    hate = pd.read_csv('Datasets/hatespeech.csv')
     hate['labels'] = hate['class'].map({0:'Hate Speech Detected', 1:'Offensive Language Detected', 2:'No Hate Speech Detected'})
 
     hate = hate[['tweet', 'labels']]

@@ -62,11 +62,11 @@ from transformers import TFRobertaModel
 
 import pickle
 
-#keras
-import tensorflow as tf
-from tensorflow import keras
-from keras import models
-from keras import layers
+# #keras
+# import tensorflow as tf
+# from tensorflow import keras
+# from keras import models
+# from keras import layers
 
 
 #metrics
@@ -79,8 +79,6 @@ df_hate = pd.DataFrame()
 df_offensive = pd.DataFrame()
 
 #hate speech detection library
-from hatesonar import Sonar
-
 from hatespeech import train_classifier, classify
 
 def hate_Analysis(df_neg):
@@ -89,7 +87,7 @@ def hate_Analysis(df_neg):
     df_offensive = pd.DataFrame()
     
     
-    for row in df_neg.iterrows():
+    for index, row in df_neg.iterrows():
         result = classify(row['tweet_OG'], cv, clf)
         if result == 'Hate Speech Detected':
             df_hate = df_hate.append(row, ignore_index=True)
@@ -106,7 +104,9 @@ def hate_Analysis(df_neg):
     
 #Show users with the most hate speech tweets
 def most_hate(df_hate):
-    df_hate.groupby('username').size().sort_values(ascending=False).head(10).plot(kind='barh', figsize=(10, 5))
+    n = 10
+    df_hate['username'].value_counts()[:n].plot(kind='barh', figsize=(10, 5))
+    #df_hate.groupby('username').size().sort_values(ascending=False).head(10).plot(kind='barh', figsize=(10, 5))
     #show users with the most hate speech tweets
     # plt.figure(figsize=(8,6))
     # sns.countplot(df_hate['username'])
@@ -232,11 +232,11 @@ def clean_data(fname):
 
     #save train, test and validation sets to csv files
     train = pd.DataFrame(list(zip(X_train, y_train_le)), columns = ['tweet_OG', 'Sentiment'])
-    train.to_csv('train.csv', index=False)
+    train.to_csv('Datasets/train.csv', index=False)
     valid = pd.DataFrame(list(zip(X_valid, y_valid_le)), columns = ['tweet_OG', 'Sentiment'])
-    valid.to_csv('valid.csv', index=False)
+    valid.to_csv('Datasets/valid.csv', index=False)
     test = pd.DataFrame(list(zip(X_test, y_test_le)), columns = ['tweet_OG', 'Sentiment'])
-    test.to_csv('test.csv', index=False)
+    test.to_csv('Datasets/test.csv', index=False)
 
     #call naive_bayes function
     naive_bayes(X_train, X_test, y_train_le, y_test_le)
@@ -244,9 +244,9 @@ def clean_data(fname):
 
 #function to retrieve x and y values from train, test and validation sets stored in csv files
 def get_data():
-    df_train = pd.read_csv('train.csv')
-    df_valid = pd.read_csv('valid.csv')
-    df_test = pd.read_csv('test.csv')
+    df_train = pd.read_csv('Datasets/train.csv')
+    df_valid = pd.read_csv('Datasets/valid.csv')
+    df_test = pd.read_csv('Datasets/test.csv')
 
     X_train = df_train['tweet_OG'].values
     y_train_le = df_train['Sentiment'].values
@@ -393,8 +393,8 @@ def main():
     #get values from csv file with get_data() 
     X_train, y_train_le, X_valid, y_valid, X_test, y_test_le = get_data()
     #run naive bayes classifier
-    # naive_bayes(X_train,X_test, y_train_le, y_test_le)
-    df = pd.read_csv('tweets.csv')
+    naive_bayes(X_train,X_test, y_train_le, y_test_le)
+    df = pd.read_csv('Datasets/tweets.csv')
     hate_Analysis(df)
     # wordcloud(df)
     # bar_chart(df)

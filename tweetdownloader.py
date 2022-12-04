@@ -12,7 +12,7 @@ auth = tweepy.OAuthHandler(os.getenv("CONSUMER_KEY"), os.getenv("CONSUMER_SECRET
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
 def get_tweets(keyword):
-    filename="tweets.csv"
+    filename="Datasets/tweets.csv"
     if (not os.path.exists(filename)):
         df = pd.DataFrame({'timestamp': [],
                    'tweet_OG': [],
@@ -25,11 +25,6 @@ def get_tweets(keyword):
                    'Sentiment': []})
     else:
         df = pd.read_csv(filename)
-
-    # df = pd.read_csv('dataset1.csv', encoding='utf-8')
-    #connect to twitter api
-    from dotenv import load_dotenv
-    load_dotenv
     #search for tweets with the hashtag or keyword = 'WorldCup'
     for tweet in tweepy.Cursor(api.search_tweets, q=keyword, lang='en', tweet_mode='extended').items(NUM_TWEETS):
         # timestamp,tweet_OG,username,all_hashtags,location,followers_count,retweet_count,favorite_count,Sentiment
