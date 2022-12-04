@@ -13,7 +13,7 @@ import string
 stopword = set(stopwords.words('english'))
 
 hate = pd.read_csv('hatespeech.csv')
-hate['labels'] = hate['class'].map({0:'Hate Speech Detected', 1:'Offensive Language Detected', 3:'No Hate Speech Detected'})
+hate['labels'] = hate['class'].map({0:'Hate Speech Detected', 1:'Offensive Language Detected', 2:'No Hate Speech Detected'})
 
 hate = hate[['tweet', 'labels']]
 hate.head()
@@ -46,8 +46,9 @@ x_train, x_test, y_train, y_test = train_test_split(x,y, test_size=0.33, random_
 clf = DecisionTreeClassifier()
 clf.fit(x_train, y_train)
 # print (clf.score(x_test, y_test))
-# test = ['I hate you']
 
-# hate = cv.transform([test]).toarray()
-# print(clf.predict(hate))
+test = 'Fuck you'
+
+hate = cv.transform([test]).toarray()
+print(clf.predict(hate))
  
