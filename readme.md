@@ -80,6 +80,25 @@ This project was built using the following technologies.
 
 [NLTK](https://www.nltk.org/) - The python library used to analyze the sentiment of the tweets
 
+[Tensorflow](https://www.tensorflow.org/) - The python library used to train the sentiment analysis model
+
+[SciKit Learn](https://scikit-learn.org/stable/) - The python library used to train the sentiment analysis model
+
+[Matplotlib](https://matplotlib.org/) - The python library used to create the graphs
+
+[Pandas](https://pandas.pydata.org/) - The python library used to create the graphs
+
+[Seaborn](https://seaborn.pydata.org/) - The python library used to create the graphs
+
+[Transformers](https://huggingface.co/transformers/) - The python library used to train the sentiment analysis model
+
+[imbalance-learn](https://imbalanced-learn.org/stable/) - The python library used to train the sentiment analysis model
+
+[Jaal](https://github.com/imohitmayank/jaal) - Python library for viewing user network graphs
+
+[Dotenv](https://pypi.org/project/python-dotenv/) - Python library for loading environment variables from .env files
+
+
 ## Authors
 Nikholas Pcenicni - Initial work - [nikpcenicni](https://pcenicni.dev)
 

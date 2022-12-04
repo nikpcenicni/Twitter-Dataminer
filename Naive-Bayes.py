@@ -73,13 +73,32 @@ import pickle
 from sklearn.metrics import accuracy_score, f1_score
 from sklearn.metrics import classification_report, confusion_matrix
 
+#hate speech detection library
+from hatespeech import train_classifier, classify
+
+# User Network Analysis
+from network import build_network, resume_network
+
 #globally define variables
 df_neg = pd.DataFrame()
 df_hate = pd.DataFrame()
 df_offensive = pd.DataFrame()
+###########################################
+########## User Network Analysis ##########
+###########################################
+def user_network(df_hate, df_offensive):
+    
+    for index, row in df_hate.iterrows():
+        # print(row['username'])
+        # print(row['text'])
+        build_network(row['username'], "hate")        
+    
+    # # builds the network
+    # build_network(df)
+    # # resumes the network
+    # resume_network()
 
-#hate speech detection library
-from hatespeech import train_classifier, classify
+### Hate Speech Detection
 
 def hate_Analysis(df_neg):
     cv, clf = train_classifier()
@@ -90,52 +109,68 @@ def hate_Analysis(df_neg):
     for index, row in df_neg.iterrows():
         result = classify(row['tweet_OG'], cv, clf)
         if result == 'Hate Speech Detected':
-            df_hate = df_hate.append(row, ignore_index=True)
+            df_hate = pd.concat([df_hate, row.to_frame().T], ignore_index=True)
         elif result == 'Offensive Language Detected':
-            df_offensive = df_offensive.append(row, ignore_index=True)
+            df_offensive = pd.concat([df_offensive, row.to_frame().T], ignore_index=True)
         else:
             continue
-    print(df_hate.head())
-    print(df_offensive.head())
-    most_hate(df_hate)
-    most_offensive(df_offensive)
+    # print(df_hate.head())
+    # print(df_offensive.head())
+    df_hate = most_hate(df_hate)
+    df_offensive = most_offensive(df_offensive)
     
+    return df_hate, df_offensive
     
-    
-#Show users with the most hate speech tweets
+# Shows users with the most hateful language used in tweets
+# takes in a dataframe of tweets with hateful language
+# returns a dataframe of the users with the most hateful language used in tweets
 def most_hate(df_hate):
+    # sets the number of users to be find
     n = 10
-    mostCommonUsers = df_hate['username'].value_counts()[:n].index.tolist()
-    occurences = df_hate['username'].value_counts()[:n].tolist()
+    # gets the most common users
+    mostCommonUsers = pd.DataFrame(df_hate['username'].value_counts()[:n].index.tolist(), columns=['username'])
+    # gets the number of occurences of the most common users
+    occurences = pd.DataFrame(df_hate['username'].value_counts()[:n].tolist(), columns=['occurences'])
     
-    print(mostCommonUsers)
-    print(occurences)
-    #df = df_hate.loc[df_hate['username'].isin(mostCommonUsers)].groupby('username').size()
+    # combines the two dataframes
+    df = pd.concat([mostCommonUsers, occurences], axis=1)
 
-    plt.bar(mostCommonUsers, occurences, width = 0.8, color = 'red')
+    #Show users with the most hateful language tweets and exports plot to png file
+    plt.barh(df['username'],df['occurences'], height = 0.8, color = 'red')
     plt.xlabel('Users')
     plt.ylabel('Number of Tweets')
-    plt.show()
-    
-#Show users with the most offensive language tweets
-def most_offensive(df_offensive):
-    n = 10
-    mostCommonUsers = df_offensive['username'].value_counts()[:n].index.tolist()
-    occurences = df_offensive['username'].value_counts()[:n].tolist()
-                            
-    print(mostCommonUsers)
-    print(occurences)
-    
-    plt.bar(mostCommonUsers, occurences, width = 0.8, color = ['red', 'green'])
-    plt.xlabel('Users')
-    plt.ylabel('Number of Tweets')
-    plt.show()
-    #df = df_offensive.loc[df_hate['username'].isin(mostCommonUsers)].groupby('username').size()    
-    # plt.bar(mostCommonUsers, df, width = 0.8, color = 'red')
-    # plt.xlabel('Users')
-    # plt.ylabel('Number of Tweets')
+    plt.savefig('most_hate.png')
     # plt.show()
-    # df_hate.groupby('username').size().sort_values(ascending=False).head(100).plot(kind='barh', figsize=(10, 5))
+    
+    # returns the dataframe
+    return df
+    
+# Show users with the most offensive language tweets
+# takes in a dataframe of tweets with offensive language
+# returns a dataframe of the users with the most offensive language used in tweets
+def most_offensive(df_offensive):
+    # sets the number of users to be find
+    n = 10
+    # gets the most common users
+    mostCommonUsers = pd.DataFrame(df_offensive['username'].value_counts()[:n].index.tolist(), columns=['username'])
+    # gets the number of occurences of the most common users
+    occurences = pd.DataFrame(df_offensive['username'].value_counts()[:n].tolist(), columns=['occurences'])
+    
+    # combines the two dataframes
+    df = pd.concat([mostCommonUsers, occurences], axis=1)
+ 
+    # Show users with the most offensive language tweets and exports plot to png file
+    plt.barh(df['username'], df['occurences'], height= 0.8, color = 'red')
+    plt.xlabel('Users')
+    plt.ylabel('Number of Tweets')
+    plt.title('Users With Most Offensive Language Used')
+    plt.savefig('offensive.png')
+    # plt.show()
+    
+    # returns the dataframe
+    return df
+
+### Sentiment Analysis
 
 def bar_chart(df):
     #create bar chart
@@ -150,36 +185,37 @@ def bar_chart(df):
     plt.title('Sentiment Analysis')
     plt.show()
 
-#extract tweets from twitter using tweepy and store in csv file
-def create_CSV(fname):
-    #connect to twitter api
-    from dotenv import load_dotenv
-    load_dotenv
-    auth = tweepy.OAuthHandler(os.getenv("CONSUMER_KEY"), os.getenv("CONSUMER_SECRET"))
-    api = tweepy.API(auth, wait_on_rate_limit=True)
+#######################
+#### NOT USED? ########
+#######################
+# #extract tweets from twitter using tweepy and store in csv file
+# def create_CSV(fname):
+#     #connect to twitter api
+#     from dotenv import load_dotenv
+#     load_dotenv
+#     auth = tweepy.OAuthHandler(os.getenv("CONSUMER_KEY"), os.getenv("CONSUMER_SECRET"))
+#     api = tweepy.API(auth, wait_on_rate_limit=True)
+#     # #name of csv file to be created
+#     # fname = "dataset.csv"
+#     #open csv file
+#     with open(fname, 'w', encoding='utf-8') as file:
+#         W = csv.writer(file)
+#         #write header row to csv file
+#         W.writerow(['timestamp', 'tweet_OG', 'username', 'all_hashtags', 'location', 
+#                     'followers_count', 'retweet_count', 'favorite_count', 'Sentiment'])
+#         #search for tweets with the hashtag or keyword = 'WorldCup'
+#         for tweet in tweepy.Cursor(api.search, q='#WorldCup', lang='en', tweet_mode='extended').items(1000):
+#             W.writerow([tweet.created_at, tweet.full_text.replace('\n',' ').encode('utf-8'), 
+#                         tweet.user.screen_name, [e['text'] for e in tweet._json['entities']['hashtags']], 
+#                         tweet.user.location, tweet.user.followers_count, tweet.retweet_count, tweet.favorite_count, ''])
+#     #close csv file
+#     file.close()
 
-    # #name of csv file to be created
-    # fname = "dataset.csv"
 
-    #open csv file
-    with open(fname, 'w', encoding='utf-8') as file:
-        W = csv.writer(file)
+#######################################
+########## Utility Functions ##########
+#######################################
 
-        #write header row to csv file
-        W.writerow(['timestamp', 'tweet_OG', 'username', 'all_hashtags', 'location', 
-                    'followers_count', 'retweet_count', 'favorite_count', 'Sentiment'])
-
-        #search for tweets with the hashtag or keyword = 'WorldCup'
-        for tweet in tweepy.Cursor(api.search, q='#WorldCup', lang='en', tweet_mode='extended').items(1000):
-            W.writerow([tweet.created_at, tweet.full_text.replace('\n',' ').encode('utf-8'), 
-                        tweet.user.screen_name, [e['text'] for e in tweet._json['entities']['hashtags']], 
-                        tweet.user.location, tweet.user.followers_count, tweet.retweet_count, tweet.favorite_count, ''])
-
-
-    #close csv file
-    file.close()
-
-#clean data 
 def clean_data(fname):
     print('Cleaning Data')
     df = pd.read_csv(fname)
@@ -413,7 +449,8 @@ def main():
     #run naive bayes classifier
     naive_bayes(X_train,X_test, y_train_le, y_test_le)
     df = pd.read_csv('Datasets/tweets.csv')
-    hate_Analysis(df)
+    most_hate, most_offensive = hate_Analysis(df)
+    user_network(most_hate, most_offensive)
     # wordcloud(df)
     # bar_chart(df)
     # df.info()

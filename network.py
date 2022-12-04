@@ -3,6 +3,10 @@ import pandas as pd
 from queue import Queue
 import os
 from dotenv import load_dotenv
+from jaal import Jaal
+from jaal.datasets import load_got
+from dash import html
+
 
 q = Queue()
 
@@ -13,11 +17,26 @@ auth.set_access_token(os.getenv("ACCESS_TOKEN"), os.getenv("ACCESS_TOKEN_SECRET"
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
 # Output details
-out_user = 'Datasets/users.csv'
-out_followers = 'Datasets/followers.csv'
-out_skip = 'Datasets/skipped.csv'
-out_name = 'Datasets/id.csv'
-def build_network(username):
+
+def set_globals(type):
+    if type == "offensive":
+        out_user = 'Datasets/users_offensive.csv'
+        out_followers = 'Datasets/followers_offensive.csv'
+        out_skip = 'Datasets/skipped_offensive.csv'
+        return out_user, out_followers, out_skip
+    elif type == "hate":
+        out_user = 'Datasets/users_hate.csv'
+        out_followers = 'Datasets/followers_hate.csv'
+        out_skip = 'Datasets/skipped_hate.csv'
+        return out_user, out_followers, out_skip
+    elif type == "test":
+        out_user = 'Datasets/users.csv'
+        out_followers = 'Datasets/followers.csv'
+        out_skip = 'Datasets/skipped.csv'
+        return out_user, out_followers, out_skip
+    
+def build_network(username, type):
+    out_user, out_followers, out_skip = set_globals(type)
     # Setting up data frames with initial user
     user = api.get_user(screen_name=username)
     user_details = {'name':user.name,
@@ -26,8 +45,7 @@ def build_network(username):
         'id':user.id,
         'friends_count':user.friends_count,
         'followers_count':user.followers_count}
-    name_df = pd.DataFrame({'id':user.id},index=[0])
-    master_followers = pd.DataFrame({'to':user.id,'from':api.get_follower_ids(user_id=user.id)})
+    master_followers = pd.DataFrame({'to':user.id,'from':api.get_follower_ids(user_id=user.id),"username":user.screen_name})
     master_user_details = pd.DataFrame([user_details])
 
     # Setting up skip_listlist
@@ -39,7 +57,6 @@ def build_network(username):
     master_user_details.to_csv(out_user,index=False)
     master_followers.to_csv(out_followers,index=False)
     skip_df.to_csv(out_skip,index=False)
-    name_df.to_csv(out_name,index=False)
 
     # Putting initial follower seed in queue
     list(map(q.put,master_followers['from']))
@@ -50,6 +67,7 @@ def build_network(username):
         if u in skip_list:
             continue
         else:
+            try:
                 try:
                     # API call to get user data
                     user = api.get_user(user_id=u)
@@ -67,11 +85,9 @@ def build_network(username):
                     # Appending user data to master list
                     user_details = pd.DataFrame([user_details])
                     master_user_details = master_user_details.append(user_details)
-                    name = pd.DataFrame({'id':user.screen_name},index=[0])
-                    name_df = name_df.append(name)
                     
                     # Getting followers and appending to master list
-                    followers = pd.DataFrame({'from':user.id,'to':api.get_follower_ids(user_id=user.id)})
+                    followers = pd.DataFrame({'from':user.id,'to':api.get_follower_ids(user_id=user.id),"username":user.screen_name})
                     if followers.shape[0] > 200:
                         followers = followers.sample(200)
                     else:
@@ -85,7 +101,6 @@ def build_network(username):
                     user_details.to_csv(out_user,index=False,mode='a',header=False)
                     followers.to_csv(out_followers,index=False,mode='a',header=False)
                     skip_df.to_csv(out_skip,index=False,mode='a',header=False)
-                    name_df.to_csv(out_name,index=False,mode='a',header=False)
                     print (len(list(q.queue)))
                     
                 # Error handling
@@ -102,7 +117,11 @@ def build_network(username):
                         print ('User suspended.')
                         skip_list.append(u)
                         skip_df = pd.DataFrame({'id':u},index=[0])
-                        skip_df.to_csv(out_skip,index=False,mode='a',header=False)    
+                        skip_df.to_csv(out_skip,index=False,mode='a',header=False)   
+            except Exception as e:
+                print ('Error: ',e)
+                continue
+                    
 
 
 def resume_network(username):
@@ -183,9 +202,15 @@ def resume_network(username):
                         skip_df.to_csv(out_skip,index=False,mode='a',header=False)    
 
 
+def view_network():
+    # load the data
+    edge_df = pd.read_csv('Datasets/followers.csv')
+    #edge_df, node_df = load_got()
+    Jaal(edge_df).plot()
+    
+
+# build_network('nikpcenicni',"test")
 
 
-
-
-build_network('sawed_sajid')
-#resume_network('elonmusk')
+# #resume_network('elonmusk')
+# view_network()
