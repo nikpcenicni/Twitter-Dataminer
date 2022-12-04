@@ -38,7 +38,7 @@ def set_globals(type):
         out_skip = 'Datasets/skipped.csv'
         return out_user, out_followers, out_skip
     
-def build_network(username, type):
+def build_network(username, type, length):
     out_user, out_followers, out_skip = set_globals(type)
     # Setting up data frames with initial user
     user = api.get_user(screen_name=username)
@@ -65,11 +65,11 @@ def build_network(username, type):
     list(map(q.put,master_followers['from']))
     print (len(list(q.queue)))
 
-    while not q.empty():
+    while not q.empty() and len(skip_list) < length:
         u = q.get()
         if u in skip_list:
             continue
-        elif len(out_user) > 10 or len(out_followers) > 1000:
+        elif len(skip_list) >= length:
             break
         else:
             try:
@@ -89,15 +89,15 @@ def build_network(username, type):
                     
                     # Appending user data to master list
                     user_details = pd.DataFrame([user_details])
-                    master_user_details = master_user_details.append(user_details)
+                    master_user_details = pd.concat([master_user_details,user_details],ignore_index=True)
                     
                     # Getting followers and appending to master list
                     followers = pd.DataFrame({'from':user.id,'to':api.get_follower_ids(user_id=user.id),"username":user.screen_name})
-                    if followers.shape[0] > 200:
-                        followers = followers.sample(200)
+                    if followers.shape[0] > 20:
+                        followers = followers.sample(length)
                     else:
                         pass
-                    master_followers = master_followers.append(followers)
+                    master_followers = pd.concat([master_followers, followers], ignore_index=True)
                     
                     # Adding retrieved followers to queue
                     list(map(q.put,followers['to']))
@@ -107,7 +107,6 @@ def build_network(username, type):
                     followers.to_csv(out_followers,index=False,mode='a',header=False)
                     skip_df.to_csv(out_skip,index=False,mode='a',header=False)
                     print (len(list(q.queue)))
-                    
                 # Error handling
                 except tweepy.TweepError as error:
                     print (type(error))
@@ -216,8 +215,8 @@ def view_network(type):
 
 
 
-#build_network('QualleSharlene',"offensive")
+#build_network('QualleSharlene',"test", 10)
 
 
-# #resume_network('elonmusk')
-view_network("offensive")
+# # #resume_network('elonmusk')
+# view_network("offensive")
