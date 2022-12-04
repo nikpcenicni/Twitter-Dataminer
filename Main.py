@@ -18,7 +18,6 @@
 # the model is then used to predict the sentiment of the tweets
 # the tweets are then classified as hate speech, offensive language, neither
 
-# HATE SPEECH DETECTION DOES NOT WORK PROPERLY SINCE IT CANNOT LOCATE THE HATE SPEECH DETECTION MODEL
 
 #import packages
 #general purpose packages
@@ -110,15 +109,21 @@ def hate_Analysis(df_neg):
     for index, row in df_neg.iterrows():
         result = classify(row['tweet_OG'], cv, clf)
         if result == 'Hate Speech Detected':
-            df_hate = pd.concat([df_hate, row.to_frame().T], ignore_index=True)
+            df_hate = pd.concat([df_hate, row.to_frame().T], ignore_index=True) 
         elif result == 'Offensive Language Detected':
             df_offensive = pd.concat([df_offensive, row.to_frame().T], ignore_index=True)
         else:
             continue
-    # print(df_hate.head())
-    # print(df_offensive.head())
-    df_hate = most_hate(df_hate)
-    df_offensive = most_offensive(df_offensive)
+
+    # df_hate.info()
+    # df_offensive.info()
+
+    #rename 'tweet' column in df_hate and df_offensive to 'tweet_OG'
+    df_hate.rename(columns={'tweet':'tweet_OG'}, inplace=True)
+    df_offensive.rename(columns={'tweet':'tweet_OG'}, inplace=True)
+
+    df_hate_Users = most_hate(df_hate)
+    df_offensive_USers = most_offensive(df_offensive)
     
     return df_hate, df_offensive
     
@@ -141,7 +146,7 @@ def most_hate(df_hate):
     plt.xlabel('Users')
     plt.ylabel('Number of Tweets')
     plt.savefig('most_hate.png')
-    # plt.show()
+    plt.show()
     
     # returns the dataframe
     return df
@@ -166,7 +171,7 @@ def most_offensive(df_offensive):
     plt.ylabel('Number of Tweets')
     plt.title('Users With Most Offensive Language Used')
     plt.savefig('offensive.png')
-    # plt.show()
+    plt.show()
     
     # returns the dataframe
     return df
@@ -186,9 +191,9 @@ def bar_chart(df):
     plt.title('Sentiment Analysis')
     plt.show()
 
-#######################
-#### NOT USED? ########
-#######################
+#####################################################################
+###### ONLY REQUIRED TO PULL TWEETS AND INITIALIZE CSV DATASET ######
+#####################################################################
 # #extract tweets from twitter using tweepy and store in csv file
 # def create_CSV(fname):
 #     #connect to twitter api
@@ -324,21 +329,15 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     X_test_tf = tf_transformer.transform(X_test_cv)
 
     nb_classifier = BernoulliNB()
-    nb_classifier.fit(X_train_tf, y_train_le)
+    nb_classifier.fit(X_train_tf, y_train_le) #training model
 
-    nb_predictions = nb_classifier.predict(X_test_tf)
+    nb_predictions = nb_classifier.predict(X_test_tf) #predictions
 
-    # print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions))
-    # print()
-    # #classification report
-    # print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
-    # print()
-
-    #create dataframe of negative tweets
-    df_neg = pd.DataFrame(list(zip(X_test, nb_predictions)), columns = ['tweet_OG', 'Sentiment'])
-    df_neg = df_neg[df_neg['Sentiment'] == 0]
-    df_neg = df_neg.reset_index(drop=True)
-
+    print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions))
+    print()
+    #classification report
+    print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
+    print()
 
     # #confusion matrix
     # cm = confusion_matrix(y_test_le, nb_predictions)
@@ -350,9 +349,7 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     # plt.ylabel('Truth')
     # plt.show()
 
-    #perform hate speech detection on negative tweets
-    # df_hate = pd.DataFrame(list(zip(X_test, nb_predictions)), columns = ['tweet_OG', 'username',])
-    # hate_Analysis(df_hate)
+
 
 def get_sentiment(tweet):
     #get sentiment using vaderSentiment and classify tweets as extreme positive, positive, neutral, negative, extreme negative
@@ -442,6 +439,7 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
     plt.xlabel('Predicted label')
     plt.show()
 
+
 def main():
     # create_CSV()
     # df = clean_data('tweets.csv')
@@ -452,6 +450,7 @@ def main():
     df = pd.read_csv('Datasets/tweets.csv')
     most_hate, most_offensive = hate_Analysis(df)
     user_network(most_hate, most_offensive)
+
     # wordcloud(df)
     # bar_chart(df)
     # df.info()
