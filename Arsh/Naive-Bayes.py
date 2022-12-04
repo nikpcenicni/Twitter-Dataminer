@@ -114,6 +114,7 @@ def hate_Analysis(df_neg):
     df_hate = pd.DataFrame()
     df_offensive = pd.DataFrame()
     
+    
     for index, row in df_neg.iterrows():
         result = classify(row['tweet_OG'], cv, clf)
         if result == 'Hate Speech Detected':
@@ -122,6 +123,8 @@ def hate_Analysis(df_neg):
             df_offensive = df_offensive.append(row, ignore_index=True)
         else:
             continue
+    print(df_hate.head())
+    print(df_offensive.head())
     most_hate(df_hate)
     most_offensive(df_offensive)
     
@@ -268,7 +271,6 @@ def clean_data(fname):
 
     #call naive_bayes function
     naive_bayes(X_train, X_test, y_train_le, y_test_le)
-
     return df
 
 #function to retrieve x and y values from train, test and validation sets stored in csv files
@@ -325,7 +327,8 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     # plt.show()
 
     #perform hate speech detection on negative tweets
-    hate_Analysis(df_neg)
+    # df_hate = pd.DataFrame(list(zip(X_test, nb_predictions)), columns = ['tweet_OG', 'username',])
+    # hate_Analysis(df_hate)
 
 def get_sentiment(tweet):
     #get sentiment using vaderSentiment and classify tweets as extreme positive, positive, neutral, negative, extreme negative
@@ -422,6 +425,8 @@ def main():
     X_train, y_train_le, X_valid, y_valid, X_test, y_test_le = get_data()
     #run naive bayes classifier
     naive_bayes(X_train,X_test, y_train_le, y_test_le)
+    df = pd.read_csv('tweets.csv')
+    hate_Analysis(df)
     # wordcloud(df)
     # bar_chart(df)
     # df.info()
