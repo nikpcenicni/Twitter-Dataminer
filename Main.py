@@ -371,6 +371,49 @@ def Model_SVM(X_train, X_test, y_train_le, y_test_le):
     print(classification_report(y_test_le, y_pred))
     print("accuracy: ", metrics.accuracy_score(y_test_le, y_pred))
 
+    # #confusion matrix
+    # cm = confusion_matrix(y_test_le, y_pred)
+    # # print(cm)
+    # #plot confusion matrix
+    # plt.figure(figsize=(10,7))
+    # sns.heatmap(cm, annot=True)
+    # plt.xlabel('Predicted')
+    # plt.ylabel('Truth')
+    # plt.show()
+
+
+# def Model_RandomForest(X_train, X_test, y_train_le, y_test_le):
+#     clf = CountVectorizer()
+#     X_train_cv = clf.fit_transform(X_train)
+#     X_test_cv = clf.transform(X_test)
+
+#     tf_transformer = TfidfTransformer(use_idf=True).fit(X_train_cv)
+#     X_train_tf = tf_transformer.transform(X_train_cv)
+#     X_test_tf = tf_transformer.transform(X_test_cv)
+
+#     # Next we can begin building the Random Forest classifier
+#     # we use the same parameters as in the Naive Bayes classifier
+#     model = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
+#     model.fit(X_train_tf, y_train_le)
+#     model.score(X_test_tf, y_test_le)
+
+#     # we can now predict the sentiment of the test set
+#     y_pred = model.predict(X_test_tf)
+
+#     # we can now evaluate the performance of the classifier
+#     print(classification_report(y_test_le, y_pred))
+#     print("accuracy: ", metrics.accuracy_score(y_test_le, y_pred))
+
+#     # #confusion matrix
+#     # cm = confusion_matrix(y_test_le, y_pred)
+#     # # print(cm)
+#     # #plot confusion matrix
+#     # plt.figure(figsize=(10,7))
+#     # sns.heatmap(cm, annot=True)
+#     # plt.xlabel('Predicted')
+#     # plt.ylabel('Truth')
+#     # plt.show()
+
 
 def get_sentiment(tweet):
     #get sentiment using vaderSentiment and classify tweets as extreme positive, positive, neutral, negative, extreme negative
