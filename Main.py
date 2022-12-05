@@ -538,7 +538,7 @@ def main():
     #run naive bayes classifier
     naive_bayes(X_train,X_test, y_train_le, y_test_le)
     df = pd.read_csv('Datasets/tweets.csv')
-    # most_hate, most_offensive = hate_Analysis(df)
+    most_hate, most_offensive = hate_Analysis(df)
     # user_network(most_hate, most_offensive)
     #view_network('hate')
     # naive_bayes(X_train,X_test, y_train_le, y_test_le)
