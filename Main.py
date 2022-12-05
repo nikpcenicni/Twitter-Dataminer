@@ -82,6 +82,7 @@ from network import build_network, view_network
 df_neg = pd.DataFrame()
 df_hate = pd.DataFrame()
 df_offensive = pd.DataFrame()
+
 ###########################################
 ########## User Network Analysis ##########
 ###########################################
@@ -110,17 +111,6 @@ def user_network(df_hate, df_offensive):
         offensive_user_details_df = pd.concat([offensive_user_details_df, master_user_details], ignore_index=True)
         offensive_user_details_df.to_csv('Datasets/offensive_user_details.csv', index=False)
 
-   
-   
-        
-    #     # print(row['username'])
-    #     # print(row['text'])
-    #     build_network(row['username'], "hate",  num_users)        
-    # for index, row in df_offensive.iterrows():
-    #     # print(row['username'])
-    #     # print(row['text'])
-    #     build_network(row['username'], "offensive",  num_users)        
-    
     # view_network("hate")
     
     # view_network("offensive")
@@ -131,7 +121,6 @@ def hate_Analysis(df_neg):
     cv, clf = train_classifier()
     df_hate = pd.DataFrame()
     df_offensive = pd.DataFrame()
-    
     
     for index, row in df_neg.iterrows():
         result = classify(row['tweet_OG'], cv, clf)
@@ -536,13 +525,13 @@ def main():
     # df = clean_data('tweets.csv')
     X_train, y_train_le, X_valid, y_valid, X_test, y_test_le = get_data()
     #run naive bayes classifier
-    naive_bayes(X_train,X_test, y_train_le, y_test_le)
-    df = pd.read_csv('Datasets/tweets.csv')
-    most_hate, most_offensive = hate_Analysis(df)
+    #naive_bayes(X_train,X_test, y_train_le, y_test_le)
+    #df = pd.read_csv('Datasets/tweets.csv')
+    # most_hate, most_offensive = hate_Analysis(df)
     # user_network(most_hate, most_offensive)
     #view_network('hate')
     # naive_bayes(X_train,X_test, y_train_le, y_test_le)
-    #Model_SVM(X_train, X_test, y_train_le, y_test_le)
+    Model_SVM(X_train, X_test, y_train_le, y_test_le)
     # df = pd.read_csv('Datasets/tweets.csv')
     # most_hate, most_offensive = hate_Analysis(df)
     # user_network(most_hate, most_offensive)
