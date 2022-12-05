@@ -351,4 +351,4 @@ def view_network(type):
 # print(mostf.head())
 # print(mostu.head())
 # # #resume_network('elonmusk')
-view_network("hate")
+# view_network("hate")
