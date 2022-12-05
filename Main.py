@@ -31,7 +31,7 @@ import re, string, io, emoji, tweepy, csv, sys, nltk, os
 #sklearn
 from sklearn import preprocessing, metrics
 from imblearn.over_sampling import RandomOverSampler 
-from sklearn.svm import LinearSVC #SVM
+from sklearn import svm #SVM
 from sklearn.naive_bayes import BernoulliNB #Naive Bayes
 from sklearn.linear_model import LogisticRegression #Logistic Regression
 from sklearn.model_selection import train_test_split #splitting data
@@ -348,6 +348,27 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     # plt.ylabel('Truth')
     # plt.show()
 
+def Model_SVM(X_train, X_test, y_train_le, y_test_le):
+    clf = CountVectorizer()
+    X_train_cv = clf.fit_transform(X_train)
+    X_test_cv = clf.transform(X_test)
+
+    tf_transformer = TfidfTransformer(use_idf=True).fit(X_train_cv)
+    X_train_tf = tf_transformer.transform(X_train_cv)
+    X_test_tf = tf_transformer.transform(X_test_cv)
+
+    # Next we can begin building the SVM classifier with rbf kernel
+    # we use the same parameters as in the Naive Bayes classifier
+    model = svm.SVC(kernel='rbf', C=1, gamma=1)
+    model.fit(X_train_tf, y_train_le)
+    model.score(X_test_tf, y_test_le)
+
+    # we can now predict the sentiment of the test set
+    y_pred = model.predict(X_test_tf)
+
+    # we can now evaluate the performance of the classifier
+    print(classification_report(y_test_le, y_pred))
+    print("accuracy: ", metrics.accuracy_score(y_test_le, y_pred))
 
 
 def get_sentiment(tweet):
@@ -442,13 +463,12 @@ def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix'
 def main():
     # create_CSV()
     # df = clean_data('tweets.csv')
-    #get values from csv file with get_data() 
     X_train, y_train_le, X_valid, y_valid, X_test, y_test_le = get_data()
-    #run naive bayes classifier
-    naive_bayes(X_train,X_test, y_train_le, y_test_le)
-    df = pd.read_csv('Datasets/tweets.csv')
-    most_hate, most_offensive = hate_Analysis(df)
-    user_network(most_hate, most_offensive)
+    # naive_bayes(X_train,X_test, y_train_le, y_test_le)
+    Model_SVM(X_train, X_test, y_train_le, y_test_le)
+    # df = pd.read_csv('Datasets/tweets.csv')
+    # most_hate, most_offensive = hate_Analysis(df)
+    # user_network(most_hate, most_offensive)
 
     # wordcloud(df)
     # bar_chart(df)
