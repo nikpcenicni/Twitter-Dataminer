@@ -26,7 +26,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns 
-import re, string, io, emoji, tweepy, csv, sys, nltk, os
+import re, string, io, emoji, tweepy, csv, sys, nltk, os, time
 
 #sklearn
 from sklearn import preprocessing, metrics
@@ -524,14 +524,18 @@ def main():
     # create_CSV()
     # df = clean_data('tweets.csv')
     X_train, y_train_le, X_valid, y_valid, X_test, y_test_le = get_data()
-    #run naive bayes classifier
-    #naive_bayes(X_train,X_test, y_train_le, y_test_le)
+    # run naive bayes classifier
+    start = time.time()
+    naive_bayes(X_train,X_test, y_train_le, y_test_le)
+    print("Naive Bayes took: ", time.time()-start)
     #df = pd.read_csv('Datasets/tweets.csv')
     # most_hate, most_offensive = hate_Analysis(df)
     # user_network(most_hate, most_offensive)
     #view_network('hate')
     # naive_bayes(X_train,X_test, y_train_le, y_test_le)
+    start = time.time()
     Model_SVM(X_train, X_test, y_train_le, y_test_le)
+    print("SVM took: ", time.time()-start)
     # df = pd.read_csv('Datasets/tweets.csv')
     # most_hate, most_offensive = hate_Analysis(df)
     # user_network(most_hate, most_offensive)
