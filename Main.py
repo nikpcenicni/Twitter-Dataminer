@@ -87,10 +87,11 @@ df_offensive = pd.DataFrame()
 ###########################################
 def user_network(df_hate, df_offensive):
     
+    num_users = 10
     for index, row in df_hate.iterrows():
         # print(row['username'])
         # print(row['text'])
-        build_network(row['username'], "hate")        
+        build_network(row['username'], "hate",  num_users)        
     
     # # builds the network
     # build_network(df)
