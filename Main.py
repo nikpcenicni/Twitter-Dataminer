@@ -76,7 +76,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 from hatespeech import train_classifier, classify
 
 # User Network Analysis
-from network import build_network, resume_network
+from network import build_network, view_network
 
 #globally define variables
 df_neg = pd.DataFrame()
@@ -88,15 +88,42 @@ df_offensive = pd.DataFrame()
 def user_network(df_hate, df_offensive):
     
     num_users = 10
-    for index, row in df_hate.iterrows():
-        # print(row['username'])
-        # print(row['text'])
-        build_network(row['username'], "hate",  num_users)        
     
-    # # builds the network
-    # build_network(df)
-    # # resumes the network
-    # resume_network()
+    print('Building Network...')
+    print(df_hate.head(10))
+    print(df_offensive.head(10))
+    hate_followers_df = pd.DataFrame()
+    hate_user_details_df = pd.DataFrame()
+    for index, row in df_hate.iterrows():
+        master_followers, master_user_details = build_network(row['username'],'hate', num_users)
+        hate_followers_df = pd.concat([hate_followers_df, master_followers], ignore_index=True)
+        hate_followers_df.to_csv('Datasets/hate_followers.csv', index=False)
+        hate_user_details_df = pd.concat([hate_user_details_df, master_user_details], ignore_index=True)
+        hate_user_details_df.to_csv('Datasets/hate_user_details.csv', index=False)
+    
+    offensive_followers_df = pd.DataFrame()
+    offensive_user_details_df = pd.DataFrame()
+    for index, row in df_hate.iterrows():
+        master_followers, master_user_details = build_network(row['username'],'hate', num_users)
+        offensive_followers_df = pd.concat([offensive_followers_df, master_followers], ignore_index=True)
+        offensive_followers_df.to_csv('Datasets/offensive_followers.csv', index=False)
+        offensive_user_details_df = pd.concat([offensive_user_details_df, master_user_details], ignore_index=True)
+        offensive_user_details_df.to_csv('Datasets/offensive_user_details.csv', index=False)
+
+   
+   
+        
+    #     # print(row['username'])
+    #     # print(row['text'])
+    #     build_network(row['username'], "hate",  num_users)        
+    # for index, row in df_offensive.iterrows():
+    #     # print(row['username'])
+    #     # print(row['text'])
+    #     build_network(row['username'], "offensive",  num_users)        
+    
+    # view_network("hate")
+    
+    # view_network("offensive")
 
 ### Hate Speech Detection
 
@@ -125,7 +152,7 @@ def hate_Analysis(df_neg):
     df_hate_Users = most_hate(df_hate)
     df_offensive_USers = most_offensive(df_offensive)
     
-    return df_hate, df_offensive
+    return df_hate_Users, df_offensive_USers
     
 # Shows users with the most hateful language used in tweets
 # takes in a dataframe of tweets with hateful language
@@ -448,8 +475,9 @@ def main():
     #run naive bayes classifier
     naive_bayes(X_train,X_test, y_train_le, y_test_le)
     df = pd.read_csv('Datasets/tweets.csv')
-    most_hate, most_offensive = hate_Analysis(df)
-    user_network(most_hate, most_offensive)
+    # most_hate, most_offensive = hate_Analysis(df)
+    # user_network(most_hate, most_offensive)
+    view_network('hate')
 
     # wordcloud(df)
     # bar_chart(df)
