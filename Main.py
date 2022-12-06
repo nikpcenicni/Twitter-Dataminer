@@ -337,6 +337,17 @@ def get_data():
 
     return X_train, y_train_le, X_valid, y_valid, X_test, y_test_le
 
+def confusion_matrix_maker(y_test_le, nb_predictions):
+    #confusion matrix
+    cm = confusion_matrix(y_test_le, nb_predictions)
+    # print(cm)
+    #plot confusion matrix
+    plt.figure(figsize=(10,7))
+    sns.heatmap(cm, annot=True)
+    plt.xlabel('Predicted')
+    plt.ylabel('Truth')
+    plt.show()
+
 def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     clf = CountVectorizer() #converts a collection of text documents to a matrix of token counts
     X_train_cv = clf.fit_transform(X_train) #fit the vectorizer to the training data 
@@ -351,14 +362,14 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
 
     nb_predictions = nb_classifier.predict(X_test_tf) #predictions on test data using naive bayes classifier
 
-    # print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions)) #accuracy score of naive bayes classifier
-    # print()
-    # #classification report
-    # print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
-    # print()
+    print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions)) #accuracy score of naive bayes classifier
+    print()
+    #classification report
+    print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
+    print()
 
     # #confusion matrix
-    cm = confusion_matrix(y_test_le, nb_predictions)
+    # cm = confusion_matrix(y_test_le, nb_predictions)
     # # print(cm)
     # #plot confusion matrix
     # plt.figure(figsize=(10,7))
@@ -366,43 +377,6 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     # plt.xlabel('Predicted')
     # plt.ylabel('Truth')
     # plt.show()
-    plot_confusion_matrix(cm, classes=['Negative','Neutral','Positive'], normalize=True, title='Normalized confusion matrix')
-
-    # #plot roc curve
-    # fpr, tpr, thresholds = roc_curve(y_test_le, nb_predictions, pos_label=2)
-    # plt.plot(fpr, tpr, color='orange', label='ROC')
-    # plt.plot([0, 1], [0, 1], color='darkblue', linestyle='--')
-    # plt.xlabel('False Positive Rate')
-    # plt.ylabel('True Positive Rate')
-    # plt.title('Receiver Operating Characteristic (ROC) Curve')
-    # plt.legend()
-    # plt.show()
-
-    # #plot precision recall curve
-    # precision, recall, thresholds = precision_recall_curve(y_test_le, nb_predictions, pos_label=2)
-    # plt.plot(recall, precision, color='orange', label='Precision-Recall Curve')
-    # plt.xlabel('Recall')
-    # plt.ylabel('Precision')
-    # plt.title('Precision-Recall Curve')
-    # plt.legend()
-    # plt.show()
-
-    # plot word cloud
-    wordcloud = WordCloud(width = 800, height = 800,
-                    background_color ='white',
-                    min_font_size = 10).generate(str(X_test))
-    plt.figure(figsize = (8, 8), facecolor = None)
-    plt.imshow(wordcloud)
-    plt.axis("off")
-    plt.tight_layout(pad = 0)
-    plt.show()
-
-
-
-
-
-
-
 
 def Model_SVM(X_train, X_test, y_train_le, y_test_le):
     clf = CountVectorizer()
@@ -426,40 +400,16 @@ def Model_SVM(X_train, X_test, y_train_le, y_test_le):
     print(classification_report(y_test_le, y_pred))
     print("accuracy: ", metrics.accuracy_score(y_test_le, y_pred))
 
-    #confusion matrix
-    cm = confusion_matrix(y_test_le, y_pred)
-    # print(cm)
-    #call plot_confusion_matrix function
-    plot_confusion_matrix(cm, classes=['Negative','Neutral','Positive'], normalize=True, title='Normalized confusion matrix')
-
-    # #plot ROC curve
-    # fpr, tpr, thresholds = roc_curve(y_test_le, y_pred, pos_label=2)
-    # plt.plot(fpr, tpr, color='orange', label='ROC')
-    # plt.plot([0, 1], [0, 1], color='darkblue', linestyle='--')
-    # plt.xlabel('False Positive Rate')
-    # plt.ylabel('True Positive Rate')
-    # plt.title('Receiver Operating Characteristic (ROC) Curve')
-    # plt.legend()
+    # #confusion matrix
+    # cm = confusion_matrix(y_test_le, y_pred)
+    # # print(cm)
+    # #plot confusion matrix
+    # plt.figure(figsize=(10,7))
+    # sns.heatmap(cm, annot=True)
+    # plt.xlabel('Predicted')
+    # plt.ylabel('Truth')
     # plt.show()
 
-    # #plot precision-recall curve
-    # precision, recall, thresholds = precision_recall_curve(y_test_le, y_pred, pos_label=2)
-    # plt.plot(recall, precision, color='orange', label='Precision-Recall Curve')
-    # plt.xlabel('Recall')
-    # plt.ylabel('Precision')
-    # plt.title('Precision-Recall Curve')
-    # plt.legend()
-    # plt.show()
-
-    # #show wordcloud
-    # wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=110).generate(str(X_test))
-    # plt.figure(figsize=(10, 7))
-    # plt.imshow(wordcloud, interpolation="bilinear")
-    # plt.axis('off')
-    # plt.show()
-
-
-    
 
 
 def Model_RandomForest(X_train, X_test, y_train_le, y_test_le):
