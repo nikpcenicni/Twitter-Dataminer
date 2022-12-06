@@ -40,6 +40,7 @@ from sklearn.feature_extraction.text import CountVectorizer #Count vectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.metrics import confusion_matrix, classification_report #confusion matrix
 from sklearn.linear_model import LogisticRegression, _logistic
+from sklearn.ensemble import RandomForestClassifier
 
 from sklearn.utils import metaestimators
 
@@ -279,6 +280,7 @@ def clean_data(fname):
     print(df['Sentiment'].value_counts())
 
     #crossbalancing dataset using RandomOverSampler to create training x and y
+    # used to balance the dataset for training
     ros = RandomOverSampler(random_state=0)
     train_x, train_y = ros.fit_resample(np.array(df['tweet_OG']).reshape(-1, 1), np.array(df['Sentiment']).reshape(-1, 1))
     train_os = pd.DataFrame(list(zip([x[0] for x in train_x], train_y)), columns = ['tweet_OG', 'Sentiment'])
@@ -315,7 +317,7 @@ def clean_data(fname):
     test.to_csv('Datasets/test.csv', index=False)
 
     #call naive_bayes function
-    naive_bayes(X_train, X_test, y_train_le, y_test_le)
+    # naive_bayes(X_train, X_test, y_train_le, y_test_le)
     return df
 
 #function to retrieve x and y values from train, test and validation sets stored in csv files
@@ -347,20 +349,20 @@ def confusion_matrix_maker(y_test_le, nb_predictions):
     plt.show()
 
 def naive_bayes(X_train, X_test, y_train_le, y_test_le):
-    clf = CountVectorizer()
-    X_train_cv = clf.fit_transform(X_train)
-    X_test_cv = clf.transform(X_test)
+    clf = CountVectorizer() #converts a collection of text documents to a matrix of token counts
+    X_train_cv = clf.fit_transform(X_train) #fit the vectorizer to the training data 
+    X_test_cv = clf.transform(X_test) #transform the test data
 
-    tf_transformer = TfidfTransformer(use_idf=True).fit(X_train_cv)
-    X_train_tf = tf_transformer.transform(X_train_cv)
-    X_test_tf = tf_transformer.transform(X_test_cv)
+    tf_transformer = TfidfTransformer(use_idf=True).fit(X_train_cv) #fit the transformer to the training data
+    X_train_tf = tf_transformer.transform(X_train_cv) #transform the training data
+    X_test_tf = tf_transformer.transform(X_test_cv) #transform the test data
 
-    nb_classifier = BernoulliNB()
+    nb_classifier = BernoulliNB() #create a naive bayes classifier
     nb_classifier.fit(X_train_tf, y_train_le) #training model
 
-    nb_predictions = nb_classifier.predict(X_test_tf) #predictions
+    nb_predictions = nb_classifier.predict(X_test_tf) #predictions on test data using naive bayes classifier
 
-    print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions))
+    print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions)) #accuracy score of naive bayes classifier
     print()
     #classification report
     print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
@@ -394,37 +396,37 @@ def Model_SVM(X_train, X_test, y_train_le, y_test_le):
     # confusion_matrix_maker(y_test_le, nb_predictions)
 
 
-# def Model_RandomForest(X_train, X_test, y_train_le, y_test_le):
-#     clf = CountVectorizer()
-#     X_train_cv = clf.fit_transform(X_train)
-#     X_test_cv = clf.transform(X_test)
+def Model_RandomForest(X_train, X_test, y_train_le, y_test_le):
+    clf = CountVectorizer()
+    X_train_cv = clf.fit_transform(X_train)
+    X_test_cv = clf.transform(X_test)
 
-#     tf_transformer = TfidfTransformer(use_idf=True).fit(X_train_cv)
-#     X_train_tf = tf_transformer.transform(X_train_cv)
-#     X_test_tf = tf_transformer.transform(X_test_cv)
+    tf_transformer = TfidfTransformer(use_idf=True).fit(X_train_cv)
+    X_train_tf = tf_transformer.transform(X_train_cv)
+    X_test_tf = tf_transformer.transform(X_test_cv)
 
-#     # Next we can begin building the Random Forest classifier
-#     # we use the same parameters as in the Naive Bayes classifier
-#     model = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
-#     model.fit(X_train_tf, y_train_le)
-#     model.score(X_test_tf, y_test_le)
+    # Next we can begin building the Random Forest classifier
+    # we use the same parameters as in the Naive Bayes classifier
+    model = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
+    model.fit(X_train_tf, y_train_le)
+    model.score(X_test_tf, y_test_le)
 
-#     # we can now predict the sentiment of the test set
-#     y_pred = model.predict(X_test_tf)
+    # we can now predict the sentiment of the test set
+    y_pred = model.predict(X_test_tf)
 
-#     # we can now evaluate the performance of the classifier
-#     print(classification_report(y_test_le, y_pred))
-#     print("accuracy: ", metrics.accuracy_score(y_test_le, y_pred))
+    # we can now evaluate the performance of the classifier
+    print(classification_report(y_test_le, y_pred))
+    print("accuracy: ", metrics.accuracy_score(y_test_le, y_pred))
 
-#     # #confusion matrix
-#     # cm = confusion_matrix(y_test_le, y_pred)
-#     # # print(cm)
-#     # #plot confusion matrix
-#     # plt.figure(figsize=(10,7))
-#     # sns.heatmap(cm, annot=True)
-#     # plt.xlabel('Predicted')
-#     # plt.ylabel('Truth')
-#     # plt.show()
+    # #confusion matrix
+    # cm = confusion_matrix(y_test_le, y_pred)
+    # # print(cm)
+    # #plot confusion matrix
+    # plt.figure(figsize=(10,7))
+    # sns.heatmap(cm, annot=True)
+    # plt.xlabel('Predicted')
+    # plt.ylabel('Truth')
+    # plt.show()
 
 
 def get_sentiment(tweet):
