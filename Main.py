@@ -160,8 +160,9 @@ def most_hate(df_hate):
 
     #Show users with the most hateful language tweets and exports plot to png file
     plt.barh(df['username'],df['occurences'], height = 0.8, color = 'red')
-    plt.xlabel('Users')
-    plt.ylabel('Number of Tweets')
+    plt.xlabel('Number of Tweets')
+    plt.ylabel('Users')
+    plt.title('Users With Most Hateful Language Used')
     plt.savefig('most_hate.png')
     plt.show()
     
@@ -184,8 +185,8 @@ def most_offensive(df_offensive):
  
     # Show users with the most offensive language tweets and exports plot to png file
     plt.barh(df['username'], df['occurences'], height= 0.8, color = 'red')
-    plt.xlabel('Users')
-    plt.ylabel('Number of Tweets')
+    plt.xlabel('Number of Tweets')
+    plt.ylabel('Users')
     plt.title('Users With Most Offensive Language Used')
     plt.savefig('offensive.png')
     plt.show()
@@ -526,8 +527,8 @@ def main():
     start = time.time()
     naive_bayes(X_train,X_test, y_train_le, y_test_le)
     print("Naive Bayes took: ", time.time()-start)
-    #df = pd.read_csv('Datasets/tweets.csv')
-    # most_hate, most_offensive = hate_Analysis(df)
+    df = pd.read_csv('Datasets/tweets.csv')
+    most_hate, most_offensive = hate_Analysis(df)
     # user_network(most_hate, most_offensive)
     #view_network('hate')
     # naive_bayes(X_train,X_test, y_train_le, y_test_le)
