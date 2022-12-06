@@ -335,6 +335,17 @@ def get_data():
 
     return X_train, y_train_le, X_valid, y_valid, X_test, y_test_le
 
+def confusion_matrix_maker(y_test_le, nb_predictions):
+    #confusion matrix
+    cm = confusion_matrix(y_test_le, nb_predictions)
+    # print(cm)
+    #plot confusion matrix
+    plt.figure(figsize=(10,7))
+    sns.heatmap(cm, annot=True)
+    plt.xlabel('Predicted')
+    plt.ylabel('Truth')
+    plt.show()
+
 def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     clf = CountVectorizer()
     X_train_cv = clf.fit_transform(X_train)
@@ -354,16 +365,8 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     #classification report
     print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
     print()
-
-    # #confusion matrix
-    # cm = confusion_matrix(y_test_le, nb_predictions)
-    # # print(cm)
-    # #plot confusion matrix
-    # plt.figure(figsize=(10,7))
-    # sns.heatmap(cm, annot=True)
-    # plt.xlabel('Predicted')
-    # plt.ylabel('Truth')
-    # plt.show()
+    #confusion matrix
+    # confusion_matrix_maker(y_test_le, nb_predictions)
 
 def Model_SVM(X_train, X_test, y_train_le, y_test_le):
     clf = CountVectorizer()
@@ -387,15 +390,8 @@ def Model_SVM(X_train, X_test, y_train_le, y_test_le):
     print(classification_report(y_test_le, y_pred))
     print("accuracy: ", metrics.accuracy_score(y_test_le, y_pred))
 
-    # #confusion matrix
-    # cm = confusion_matrix(y_test_le, y_pred)
-    # # print(cm)
-    # #plot confusion matrix
-    # plt.figure(figsize=(10,7))
-    # sns.heatmap(cm, annot=True)
-    # plt.xlabel('Predicted')
-    # plt.ylabel('Truth')
-    # plt.show()
+    #confusion matrix
+    # confusion_matrix_maker(y_test_le, nb_predictions)
 
 
 # def Model_RandomForest(X_train, X_test, y_train_le, y_test_le):

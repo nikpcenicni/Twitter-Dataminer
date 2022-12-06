@@ -138,7 +138,7 @@ def view_network(type):
     edge = ''
     node = ''
     if type == 'hate':
-        path = 'Datasets/followers_hate.csv'
+        path = 'Datasets/hate_followers.csv'
         node = 'Datasets/hate_user_details.csv'
     elif type == 'offensive':
         path = 'Datasets/offensive_followers.csv'
@@ -146,7 +146,7 @@ def view_network(type):
     # load the data
     edge_df = pd.read_csv(path)
     node_df = pd.read_csv(node)
-    Jaal(edge_df,node_df).plot(vis_opts={'physics':{'stabilization':{'iterations': 100}}})
+    Jaal(edge_df,node_df).plot()
 
 
 
@@ -154,4 +154,4 @@ def view_network(type):
 # print(mostf.head())
 # print(mostu.head())
 # # #resume_network('elonmusk')
-# view_network("hate")
+#view_network("hate")
