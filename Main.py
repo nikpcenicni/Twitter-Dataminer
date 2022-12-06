@@ -38,7 +38,7 @@ from sklearn.model_selection import train_test_split #splitting data
 from sklearn.feature_extraction.text import TfidfVectorizer#TFIDF vectorizer
 from sklearn.feature_extraction.text import CountVectorizer #Count vectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
-from sklearn.metrics import confusion_matrix, classification_report #confusion matrix
+from sklearn.metrics import confusion_matrix, classification_report, precision_recall_curve, roc_curve #confusion matrix
 from sklearn.linear_model import LogisticRegression, _logistic
 from sklearn.ensemble import RandomForestClassifier
 
@@ -351,14 +351,14 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
 
     nb_predictions = nb_classifier.predict(X_test_tf) #predictions on test data using naive bayes classifier
 
-    print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions)) #accuracy score of naive bayes classifier
-    print()
-    #classification report
-    print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
-    print()
+    # print("Naive Bayes Accuracy: ", accuracy_score(y_test_le, nb_predictions)) #accuracy score of naive bayes classifier
+    # print()
+    # #classification report
+    # print(classification_report(y_test_le, nb_predictions, target_names= ['Negative','Neutral','Positive']))
+    # print()
 
     # #confusion matrix
-    # cm = confusion_matrix(y_test_le, nb_predictions)
+    cm = confusion_matrix(y_test_le, nb_predictions)
     # # print(cm)
     # #plot confusion matrix
     # plt.figure(figsize=(10,7))
@@ -366,6 +366,43 @@ def naive_bayes(X_train, X_test, y_train_le, y_test_le):
     # plt.xlabel('Predicted')
     # plt.ylabel('Truth')
     # plt.show()
+    plot_confusion_matrix(cm, classes=['Negative','Neutral','Positive'], normalize=True, title='Normalized confusion matrix')
+
+    # #plot roc curve
+    # fpr, tpr, thresholds = roc_curve(y_test_le, nb_predictions, pos_label=2)
+    # plt.plot(fpr, tpr, color='orange', label='ROC')
+    # plt.plot([0, 1], [0, 1], color='darkblue', linestyle='--')
+    # plt.xlabel('False Positive Rate')
+    # plt.ylabel('True Positive Rate')
+    # plt.title('Receiver Operating Characteristic (ROC) Curve')
+    # plt.legend()
+    # plt.show()
+
+    # #plot precision recall curve
+    # precision, recall, thresholds = precision_recall_curve(y_test_le, nb_predictions, pos_label=2)
+    # plt.plot(recall, precision, color='orange', label='Precision-Recall Curve')
+    # plt.xlabel('Recall')
+    # plt.ylabel('Precision')
+    # plt.title('Precision-Recall Curve')
+    # plt.legend()
+    # plt.show()
+
+    # plot word cloud
+    wordcloud = WordCloud(width = 800, height = 800,
+                    background_color ='white',
+                    min_font_size = 10).generate(str(X_test))
+    plt.figure(figsize = (8, 8), facecolor = None)
+    plt.imshow(wordcloud)
+    plt.axis("off")
+    plt.tight_layout(pad = 0)
+    plt.show()
+
+
+
+
+
+
+
 
 def Model_SVM(X_train, X_test, y_train_le, y_test_le):
     clf = CountVectorizer()
@@ -375,7 +412,7 @@ def Model_SVM(X_train, X_test, y_train_le, y_test_le):
     tf_transformer = TfidfTransformer(use_idf=True).fit(X_train_cv)
     X_train_tf = tf_transformer.transform(X_train_cv)
     X_test_tf = tf_transformer.transform(X_test_cv)
-
+ 
     # Next we can begin building the SVM classifier with rbf kernel
     # we use the same parameters as in the Naive Bayes classifier
     model = svm.SVC(kernel='rbf', C=1, gamma=1)
@@ -389,15 +426,40 @@ def Model_SVM(X_train, X_test, y_train_le, y_test_le):
     print(classification_report(y_test_le, y_pred))
     print("accuracy: ", metrics.accuracy_score(y_test_le, y_pred))
 
-    # #confusion matrix
-    # cm = confusion_matrix(y_test_le, y_pred)
-    # # print(cm)
-    # #plot confusion matrix
-    # plt.figure(figsize=(10,7))
-    # sns.heatmap(cm, annot=True)
-    # plt.xlabel('Predicted')
-    # plt.ylabel('Truth')
+    #confusion matrix
+    cm = confusion_matrix(y_test_le, y_pred)
+    # print(cm)
+    #call plot_confusion_matrix function
+    plot_confusion_matrix(cm, classes=['Negative','Neutral','Positive'], normalize=True, title='Normalized confusion matrix')
+
+    # #plot ROC curve
+    # fpr, tpr, thresholds = roc_curve(y_test_le, y_pred, pos_label=2)
+    # plt.plot(fpr, tpr, color='orange', label='ROC')
+    # plt.plot([0, 1], [0, 1], color='darkblue', linestyle='--')
+    # plt.xlabel('False Positive Rate')
+    # plt.ylabel('True Positive Rate')
+    # plt.title('Receiver Operating Characteristic (ROC) Curve')
+    # plt.legend()
     # plt.show()
+
+    # #plot precision-recall curve
+    # precision, recall, thresholds = precision_recall_curve(y_test_le, y_pred, pos_label=2)
+    # plt.plot(recall, precision, color='orange', label='Precision-Recall Curve')
+    # plt.xlabel('Recall')
+    # plt.ylabel('Precision')
+    # plt.title('Precision-Recall Curve')
+    # plt.legend()
+    # plt.show()
+
+    # #show wordcloud
+    # wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=110).generate(str(X_test))
+    # plt.figure(figsize=(10, 7))
+    # plt.imshow(wordcloud, interpolation="bilinear")
+    # plt.axis('off')
+    # plt.show()
+
+
+    
 
 
 def Model_RandomForest(X_train, X_test, y_train_le, y_test_le):
@@ -422,15 +484,37 @@ def Model_RandomForest(X_train, X_test, y_train_le, y_test_le):
     print(classification_report(y_test_le, y_pred))
     print("accuracy: ", metrics.accuracy_score(y_test_le, y_pred))
 
-    # #confusion matrix
-    # cm = confusion_matrix(y_test_le, y_pred)
-    # # print(cm)
-    # #plot confusion matrix
-    # plt.figure(figsize=(10,7))
-    # sns.heatmap(cm, annot=True)
-    # plt.xlabel('Predicted')
-    # plt.ylabel('Truth')
-    # plt.show()
+    #confusion matrix
+    cm = confusion_matrix(y_test_le, y_pred)
+    #call plot_confusion_matrix function
+    plot_confusion_matrix(cm, classes=['Negative', 'Neutral', 'Positive'], normalize=True, title='Normalized confusion matrix')
+
+    #plot ROC curve
+    fpr, tpr, thresholds = roc_curve(y_test_le, y_pred, pos_label=2)
+    plt.plot(fpr, tpr, color='orange', label='ROC')
+    plt.plot([0, 1], [0, 1], color='darkblue', linestyle='--')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic (ROC) Curve')
+    plt.legend()
+    plt.show()
+
+    #plot precision-recall curve
+    precision, recall, thresholds = precision_recall_curve(y_test_le, y_pred, pos_label=2)
+    plt.plot(recall, precision, color='orange', label='Precision-Recall Curve')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Precision-Recall Curve')
+    plt.legend()
+    plt.show()
+
+    #show wordcloud
+    wordcloud = WordCloud(width=800, height=500, random_state=21, max_font_size=110).generate(str(X_test))
+    plt.figure(figsize=(10, 7))
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.axis('off')
+    plt.show()
+
 
 
 def get_sentiment(tweet):
@@ -527,21 +611,20 @@ def main():
     # df = clean_data('tweets.csv')
     X_train, y_train_le, X_valid, y_valid, X_test, y_test_le = get_data()
     # run naive bayes classifier
-    start = time.time()
+    # start = time.time()
     naive_bayes(X_train,X_test, y_train_le, y_test_le)
-    print("Naive Bayes took: ", time.time()-start)
+    # print("Naive Bayes took: ", time.time()-start)
     #df = pd.read_csv('Datasets/tweets.csv')
     # most_hate, most_offensive = hate_Analysis(df)
     # user_network(most_hate, most_offensive)
     #view_network('hate')
-    # naive_bayes(X_train,X_test, y_train_le, y_test_le)
-    start = time.time()
+    # start = time.time()
     Model_SVM(X_train, X_test, y_train_le, y_test_le)
-    print("SVM took: ", time.time()-start)
+    # print("SVM took: ", time.time()-start)
     # df = pd.read_csv('Datasets/tweets.csv')
     # most_hate, most_offensive = hate_Analysis(df)
     # user_network(most_hate, most_offensive)
-
+    # Model_RandomForest(X_train, X_test, y_train_le, y_test_le)
     # wordcloud(df)
     # bar_chart(df)
     # df.info()
